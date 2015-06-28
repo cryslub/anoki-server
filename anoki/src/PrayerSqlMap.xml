@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="prayer">
+
+	<select id="recent" parameterClass="com.anoki.jaxb.Search"
+		resultClass="com.anoki.jaxb.Prayer">
+		SELECT
+		USER.PICTURE AS USERPICTURE,
+		USER.NAME AS USERNAME,
+		PRAYER.TIME AS TIME,
+		PRAYER.BACK AS BACK,
+		PRAYER.TEXT AS TEXT,
+		PRAYER.ID AS ID,
+		PRAYER.USER AS USERID,
+		(SELECT COUNT(*) FROM PRAY WHERE PRAYER = PRAYER.ID) AS PRAYCOUNT,
+		(SELECT COUNT(*) FROM REPLY WHERE PRAYER = PRAYER.ID) AS REPLYCOUNT,
+		(SELECT MAX(TIME) FROM PRAY WHERE PRAYER = PRAYER.ID AND USER=#id#) AS LASTPRAYED,
+		SCRAP.ID AS SCRAPD
+		FROM PRAYER
+		LEFT OUTER JOIN USER ON PRAYER.USER = USER.ID
+		LEFT OUTER JOIN SCRAP ON PRAYER.ID = SCRAP.PRAYER AND SCRAP.USER=#id#
+		WHERE
+		PRAYER.USER = #id#
+		OR PRAYER.PUBLIC = 'Y' AND PRAYER.USER IN (SELECT FRIEND FROM FRIEND
+		WHERE USER = #id#)
+		OR PRAYER.PUBLIC = 'N' AND PRAYER.ID = (SELECT
+		PRAYER FROM REQUEST WHERE FRIEND = #id# AND PRAYER = PRAYER.ID)
+		ORDER
+		BY PRAYER.TIME DESC
+		LIMIT #page#,#size#
+	</select>
+
+	<select id="mediaList" parameterClass="com.anoki.jaxb.Prayer"
+		resultClass="String">
+		SELECT PATH FROM MEDIA
+		WHERE PRAYER = #id#
+	</select>
+
+	<insert id="insertPrayer" parameterClass="com.anoki.jaxb.Prayer">
+		INSERT INTO PRAYER (USER,BACK,TEXT,PUBLIC,TEAM) VALUES
+		(#userId#,#back#,#text#,#pub#,#group#)
+		
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+
+	<update id="updateMedia" parameterClass="com.anoki.jaxb.Prayer">
+		UPDATE MEDIA SET PRAYER = #id#
+		WHERE ID IN
+		<iterate  property="media" open="("
+			conjunction="," close=")">
+			#media[]#
+		</iterate>
+	</update>
+
+	<insert id="insertRequest" parameterClass="com.anoki.jaxb.Prayer">
+		INSERT INTO REQUEST (
+			PRAYER,
+			FRIEND
+		) VALUES 
+		<iterate prepend="VALUES" conjunction=", " property="friends">
+			(#id#, #friends[]#)
+		</iterate>
+	</insert>
+	
+	
+	<insert id="insertRequestAlarm" parameterClass="com.anoki.jaxb.Prayer">
+		INSERT INTO ALARM (
+			USER,
+			TYPE,
+			NAME1,
+			MEDIA
+		) VALUES 
+		<iterate prepend="VALUES" conjunction=", " property="friends">
+			<![CDATA[
+			(#friends[]#, 
+			'Q',
+			SELECT NAME FROM USER WHERE ID = #userId#,
+			SELECT PICTURE FRPOM USER WHERE ID = #userId#)
+			]]>
+		</iterate>
+	</insert>
+	
+	
+	<insert id="insertFriend" parameterClass="com.anoki.jaxb.Friend">
+		INSERT INTO FRIEND(
+			USER,FRIEND
+		) VALUES (#user#,#friend#)
+	</insert>
+	
+	<insert id="insertMedia">
+		INSERT INTO MEDIA () VALUES ()
+		
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<update id="acceptFriendRquest" parameterClass="String">
+		UPDATE FRIEND SET STATE = 'A'
+		WHERE ID = #id#
+	</update>
+	
+	
+	<insert id="insertFriendAlarm" parameterClass="String">
+		INSERT INTO ALARM (
+			USER,
+			TYPE,
+			NAME1,
+			MEDIA
+		) VALUES 
+		(SELECT USER FROM FRIEND WHERE ID = #id#, 
+		'F',
+		SELECT USER.NAME 
+			FROM FRIEND LEFT OUTER JOIN USER ON FRIEND.FRIEND = USER.ID 
+			WHERE FRIEND.ID = #id#,
+		SELECT USER.PICTURE 
+			FROM FRIEND LEFT OUTER JOIN USER ON FRIEND.FRIEND = USER.ID 
+			WHERE FRIEND.ID = #id#)
+	</insert>
+	
+	
+	<insert id="insertScrap" parameterClass="com.anoki.jaxb.Scrap">
+		INSERT INTO SCRAP(
+			USER,
+			PRAYER
+		)
+		VALUES (#id#,#prayer#)
+	</insert>
+	
+</sqlMap>
+

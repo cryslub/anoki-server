@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="user">
+	<insert id="insertUser" parameterClass="com.anoki.jaxb.Phone">
+
+		INSERT INTO USER (COUNTRY,PHONE,DEVICE) VALUES
+		(#country#,#number#,#device#)
+
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<update id="updateUserDevice" parameterClass="com.anoki.jaxb.Phone">
+		UPDATE USER SET DEVICE = #device#
+		WHERE ID = #id#
+	</update>
+
+	<update id="updateUser" parameterClass="com.anoki.jaxb.User">
+		UPDATE USER SET NAME = #name#
+		,TEXT = #text#
+		,PICTURE = #media#
+		<isNotEmpty property="showPhone">
+		,SHOW_PHONE = #showPhone#
+		</isNotEmpty>
+		WHERE ID = #id#
+	</update>
+
+	
+	<select id="checkUser" parameterClass="com.anoki.jaxb.Phone" resultClass="int">
+		SELECT ID FROM USER WHERE COUNTRY=#country# AND PHONE=#number#
+	</select>
+	
+	<select id="getUser" parameterClass="com.anoki.jaxb.Phone" resultClass="int">
+		SELECT ID FROM USER WHERE COUNTRY=#country# AND PHONE=#number# AND DEVICE=#device#
+	</select>
+	
+	
+</sqlMap>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="user">
+	
+	
+	<select id="alarm" parameterClass="com.anoki.jaxb.Search"
+		resultClass="com.anoki.jaxb.Alarm">
+		SELECT
+			TYPE,
+			NAME1,
+			NAME2,			
+			TIME,
+			MEDIA
+		FROM ALARM 
+		WHERE USER = #id#
+	</select>
+	
+	<delete id="deleteAlarm" parameterClass="com.anoki.jaxb.Search">
+		DELETE FROM ALARM WHERE USER = #id#
+	</delete>
+	
+</sqlMap>
