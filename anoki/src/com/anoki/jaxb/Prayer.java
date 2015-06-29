@@ -24,4 +24,7 @@ public class Prayer {
 	public List<Phone> phone;	
 	public String group;
 	public String scrapd;
+	public String responseCount;
+	public List<Reply> reply; //미디어 list
+	
 }

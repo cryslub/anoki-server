@@ -91,7 +91,7 @@ public class AuthResource {
 		Response r = new Response();
 		
 		try {
-			Integer id = (Integer) Ibatis.smc.queryForObject("getUser",phone);
+			Integer id = (Integer) Ibatis.smc.queryForObject("getUserId",phone);
 
 			r.apiKey = logIn(id);
 			r.result="0";

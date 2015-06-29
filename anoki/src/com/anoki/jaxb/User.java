@@ -12,6 +12,9 @@ public class User {
 	public String showPhone;
 	public String account;
 	public String pass;
+	public String picture;
+	public String country;
+	public String phone;
 	
 	
 }

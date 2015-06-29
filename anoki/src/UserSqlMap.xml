@@ -39,9 +39,61 @@
 		SELECT ID FROM USER WHERE COUNTRY=#country# AND PHONE=#number#
 	</select>
 	
-	<select id="getUser" parameterClass="com.anoki.jaxb.Phone" resultClass="int">
+	<select id="getUserId" parameterClass="com.anoki.jaxb.Phone" resultClass="int">
 		SELECT ID FROM USER WHERE COUNTRY=#country# AND PHONE=#number# AND DEVICE=#device#
 	</select>
 	
+	
+	<select id="getUser" parameterClass="com.anoki.jaxb.User"
+		resultClass="com.anoki.jaxb.User">
+		SELECT 
+			PICTURE,
+			NAME,
+			TEXT,
+			ACCOUNT,
+			SHOW_PHONE AS SHOWPHONE,
+			COUNTRY,
+			PHONE
+		 FROM USER WHERE ID = #id#
+	</select>
+	
+	
+	<select id="userPrayer" parameterClass="com.anoki.jaxb.Search"
+		resultClass="com.anoki.jaxb.Prayer">
+		SELECT
+		USER.PICTURE AS USERPICTURE,
+		USER.NAME AS USERNAME,
+		PRAYER.TIME AS TIME,
+		PRAYER.BACK AS BACK,
+		PRAYER.TEXT AS TEXT,
+		PRAYER.ID AS ID,
+		PRAYER.USER AS USERID,
+		(SELECT COUNT(*) FROM PRAY WHERE PRAYER = PRAYER.ID) AS PRAYCOUNT,
+		(SELECT COUNT(*) FROM REPLY WHERE PRAYER = PRAYER.ID) AS REPLYCOUNT,
+		(SELECT MAX(TIME) FROM PRAY WHERE PRAYER = PRAYER.ID AND USER=#id#) AS LASTPRAYED,
+		SCRAP.ID AS SCRAPD
+		FROM PRAYER
+		LEFT OUTER JOIN USER ON PRAYER.USER = USER.ID
+		LEFT OUTER JOIN SCRAP ON PRAYER.ID = SCRAP.PRAYER AND SCRAP.USER=#id#
+		WHERE
+		PRAYER.USER = #searchId#
+		ORDER
+		BY PRAYER.TIME DESC
+		LIMIT #page#,#size#
+	</select>
+	
+	
+	
+	<select id="userTeam" parameterClass="com.anoki.jaxb.Search"
+		resultClass="com.anoki.jaxb.Team">
+		SELECT 
+			TEAM.PICTURE,
+			TEAM.NAME,
+			TEAM.ID
+		FROM MEMBER
+		LEFT OUTER JOIN TEAM ON MEMBER.TEAM = TEAM.ID
+		WHERE MEMBER.USER = #id#
+		AND MEMBER.STATE = 'J'
+	</select>
 	
 </sqlMap>

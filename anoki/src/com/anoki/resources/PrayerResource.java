@@ -20,8 +20,8 @@ import javax.ws.rs.core.MediaType;
 import com.anoki.jaxb.Friend;
 import com.anoki.jaxb.Phone;
 import com.anoki.jaxb.Prayer;
+import com.anoki.jaxb.Reply;
 import com.anoki.jaxb.Response;
-import com.anoki.jaxb.Scrap;
 import com.anoki.jaxb.Search;
 import com.anoki.singleton.Ibatis;
 import com.anoki.singleton.Keys;
@@ -31,9 +31,7 @@ import com.sun.jersey.multipart.FormDataParam;
 @Path("prayer")
 public class PrayerResource {
 	
-	private static final String SERVER_UPLOAD_LOCATION_FOLDER = "d://Users/joon/Desktop/Upload_Files/";
-
-	 @Context ServletContext context;
+	@Context ServletContext context;
 	
 
 	@SuppressWarnings("unchecked")
@@ -168,13 +166,13 @@ public class PrayerResource {
 	@Path("scrap")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response scrap(Scrap scrap) {
+	public Response scrap(Prayer prayer) {
 		Response r = new Response();
 		
-		scrap.id = Keys.getUserId(scrap.apiKey);
+		prayer.userId = Keys.getUserId(prayer.apiKey);
 		
 		try {
-			Ibatis.insert("insertScrap", scrap);
+			Ibatis.insert("insertScrap", prayer);
 
 			r.result = "0";
 		} catch (SQLException e) {
@@ -185,5 +183,100 @@ public class PrayerResource {
 		
 		return r;
 	}
+	
+	
+	@POST
+	@Path("pray")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response pray(Prayer prayer) {
+		Response r = new Response();
+		
+		prayer.userId = Keys.getUserId(prayer.apiKey);
+		
+		try {
+			Ibatis.insert("insertPray", prayer);
+
+			r.result = "0";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return r;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@POST
+	@Path("detail")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Prayer detail(Prayer prayer) {
+		
+		
+		prayer.userId = Keys.getUserId(prayer.apiKey);
+		
+		Prayer r = new Prayer();
+		
+		try {
+			r = (Prayer) Ibatis.object("getPrayer", prayer);
+			prayer.media = (List<String>) Ibatis.list("mediaList",prayer);
+			prayer.reply = (List<Reply>) Ibatis.list("replyList",prayer);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return r;
+	}
+	
+	
+
+	@SuppressWarnings("unchecked")
+	@POST
+	@Path("scrapd")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Prayer> scrapd(Search search) {
+
+		search.id = Keys.getUserId(search.apiKey);
+		
+		List<Prayer> result = new ArrayList<Prayer>();
+		try {
+			result = (List<Prayer>) Ibatis.list("scrapd",search);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@POST
+	@Path("request")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Prayer> request(Search search) {
+
+		search.id = Keys.getUserId(search.apiKey);
+		
+		List<Prayer> result = new ArrayList<Prayer>();
+		try {
+			result = (List<Prayer>) Ibatis.list("request",search);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
 	
 }

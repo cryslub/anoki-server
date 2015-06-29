@@ -5,6 +5,7 @@ import java.io.Reader;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.anoki.jaxb.Prayer;
 import com.anoki.jaxb.Search;
 import com.ibatis.common.resources.Resources;
 import com.ibatis.sqlmap.client.SqlMapClient;
@@ -48,5 +49,10 @@ public class Ibatis {
 	public static void delete(String id, Object arg) throws SQLException {
 		// TODO Auto-generated method stub
 		smc.delete(id,arg);
+	}
+
+	public static Object object(String id, Object arg) throws SQLException {
+		// TODO Auto-generated method stub
+		return smc.queryForObject(id,arg);
 	}
 }
