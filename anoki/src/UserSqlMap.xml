@@ -25,6 +25,12 @@
 		<isNotEmpty property="showPhone">
 		,SHOW_PHONE = #showPhone#
 		</isNotEmpty>
+		<isNotEmpty property="account">		
+		,ACCOUNT = #account#
+		</isNotEmpty>
+		<isNotEmpty property="pass">		
+		,PASS = #pass#
+		</isNotEmpty>
 		WHERE ID = #id#
 	</update>
 

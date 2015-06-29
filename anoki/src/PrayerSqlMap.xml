@@ -68,29 +68,8 @@
 	</insert>
 	
 	
-	<insert id="insertRequestAlarm" parameterClass="com.anoki.jaxb.Prayer">
-		INSERT INTO ALARM (
-			USER,
-			TYPE,
-			NAME1,
-			MEDIA
-		) VALUES 
-		<iterate prepend="VALUES" conjunction=", " property="friends">
-			<![CDATA[
-			(#friends[]#, 
-			'Q',
-			SELECT NAME FROM USER WHERE ID = #userId#,
-			SELECT PICTURE FRPOM USER WHERE ID = #userId#)
-			]]>
-		</iterate>
-	</insert>
 	
 	
-	<insert id="insertFriend" parameterClass="com.anoki.jaxb.Friend">
-		INSERT INTO FRIEND(
-			USER,FRIEND
-		) VALUES (#user#,#friend#)
-	</insert>
 	
 	<insert id="insertMedia">
 		INSERT INTO MEDIA () VALUES ()
@@ -100,28 +79,8 @@
 		</selectKey>
 	</insert>
 	
-	<update id="acceptFriendRquest" parameterClass="String">
-		UPDATE FRIEND SET STATE = 'A'
-		WHERE ID = #id#
-	</update>
 	
 	
-	<insert id="insertFriendAlarm" parameterClass="String">
-		INSERT INTO ALARM (
-			USER,
-			TYPE,
-			NAME1,
-			MEDIA
-		) VALUES 
-		(SELECT USER FROM FRIEND WHERE ID = #id#, 
-		'F',
-		SELECT USER.NAME 
-			FROM FRIEND LEFT OUTER JOIN USER ON FRIEND.FRIEND = USER.ID 
-			WHERE FRIEND.ID = #id#,
-		SELECT USER.PICTURE 
-			FROM FRIEND LEFT OUTER JOIN USER ON FRIEND.FRIEND = USER.ID 
-			WHERE FRIEND.ID = #id#)
-	</insert>
 	
 	
 	<insert id="insertScrap" parameterClass="com.anoki.jaxb.Scrap">

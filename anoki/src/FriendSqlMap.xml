@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="friend">
+
+	
+	<update id="acceptFriendRquest" parameterClass="String">
+		UPDATE FRIEND SET STATE = 'A'
+		WHERE ID = #id#
+	</update>
+	
+	
+	<insert id="insertFriend" parameterClass="com.anoki.jaxb.Friend">
+		INSERT INTO FRIEND(
+			USER,FRIEND
+		) VALUES (#user#,#friend#)
+	</insert>
+
+	<select id="friend" parameterClass="com.anoki.jaxb.Search"
+		resultClass="com.anoki.jaxb.Friend">
+		SELECT
+			USER.PICTURE,
+			USER.NAME,
+			FRIEND.FRIEND	
+		FROM FRIEND 
+		LEFT OUTER JOIN USER ON FRIEND.FRIEND = USER.ID 
+		WHERE FRIEND.USER = #id#
+	</select>
+	
+</sqlMap>
+

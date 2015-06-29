@@ -21,4 +21,69 @@
 		DELETE FROM ALARM WHERE USER = #id#
 	</delete>
 	
+	
+	<select id="message" parameterClass="com.anoki.jaxb.Search"
+		resultClass="com.anoki.jaxb.Message">
+		SELECT
+			MESSAGE.TEXT,
+			USER.PICTURE,
+			MESSAGE.TIME,			
+			USER.NAME AS SENDER,
+			MESSAGE.ID,
+			MESSAGE.BACK
+		FROM MESSAGE 
+		LEFT OUTER JOIN USER ON MESSAGE.SENDER = USER.ID 
+		WHERE MESSAGE.USER = #id#
+		ORDER BY MESSAGE.TIME DESC
+		LIMIT #page#,#size#
+	</select>
+	
+	
+	<insert id="insertMessage">
+		INSERT INTO MESSAGE (
+			USER,
+			SENDER,
+			TEXT,
+			BACK
+		) VALUES (#user#,#id#,#text#,#back#)
+		
+	</insert>
+	
+	
+	<insert id="insertRequestAlarm" parameterClass="com.anoki.jaxb.Prayer">
+		INSERT INTO ALARM (
+			USER,
+			TYPE,
+			NAME1,
+			MEDIA
+		) VALUES 
+		<iterate prepend="VALUES" conjunction=", " property="friends">
+			<![CDATA[
+			(#friends[]#, 
+			'Q',
+			SELECT NAME FROM USER WHERE ID = #userId#,
+			SELECT PICTURE FRPOM USER WHERE ID = #userId#)
+			]]>
+		</iterate>
+	</insert>
+	
+	
+	<insert id="insertFriendAlarm" parameterClass="String">
+		INSERT INTO ALARM (
+			USER,
+			TYPE,
+			NAME1,
+			MEDIA
+		) VALUES 
+		(SELECT USER FROM FRIEND WHERE ID = #id#, 
+		'F',
+		SELECT USER.NAME 
+			FROM FRIEND LEFT OUTER JOIN USER ON FRIEND.FRIEND = USER.ID 
+			WHERE FRIEND.ID = #id#,
+		SELECT USER.PICTURE 
+			FROM FRIEND LEFT OUTER JOIN USER ON FRIEND.FRIEND = USER.ID 
+			WHERE FRIEND.ID = #id#)
+	</insert>
+	
+	
 </sqlMap>

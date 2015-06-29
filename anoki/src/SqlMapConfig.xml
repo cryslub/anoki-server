@@ -15,6 +15,7 @@
   </transactionManager>
   <sqlMap resource="UserSqlMap.xml" />
   <sqlMap resource="PrayerSqlMap.xml" />
+  <sqlMap resource="FriendSqlMap.xml" />
   <sqlMap resource="EtcSqlMap.xml" />
 
 </sqlMapConfig>
