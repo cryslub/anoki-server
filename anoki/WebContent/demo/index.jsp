@@ -166,4 +166,19 @@ function send(id){
 	<input type="button" value="그룹 검색" onClick="send('#searchTeam')"/>
 </form>
 
+
+<form id="teamDetail" enctype='application/json' action="/anoki/rest/team/detail" method="post">
+	searchKey : <input name="searchKey" value="검색어"/>
+	<input type="button" value="그룹 상세 조회" onClick="send('#teamDetail')"/>
+</form>
+
+
+<form id="teamPrayer" enctype='application/json' action="/anoki/rest/team/prayer" method="post">
+	apiKey : <input name="apiKey" value="549918230"/>
+	searchId : <input name="searchId" value="2"/>	
+	page : <input name="page" value="0"/>
+	size : <input name="size" value="10"/>
+	<input type="button" value="그룹기도 조회" onClick="send('#userPrayer')"/>
+</form>
+
 </html>

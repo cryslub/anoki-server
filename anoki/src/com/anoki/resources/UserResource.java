@@ -66,6 +66,7 @@ public class UserResource {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	@POST
 	@Path("prayer")
 	@Consumes(MediaType.APPLICATION_JSON)

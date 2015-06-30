@@ -10,9 +10,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.anoki.jaxb.Prayer;
 import com.anoki.jaxb.Search;
 import com.anoki.jaxb.Team;
 import com.anoki.singleton.Ibatis;
+import com.anoki.singleton.Keys;
 
 @Path("team")
 public class TeamResource {
@@ -36,6 +38,51 @@ public class TeamResource {
 		}
 
 		return result;
+	}
+
+	
+	@POST
+	@Path("detail")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Team detail(Search search) {
+		
+		search.id = Keys.getUserId(search.apiKey);
+		
+		Team r = new Team();
+		
+		try {
+			r = (Team) Ibatis.object("getTeam", search);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return r;
+	}
+	
+	@POST
+	@Path("prayer")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Prayer prayer(Search search) {
+		
+		search.id = Keys.getUserId(search.apiKey);
+		
+		Prayer r = new Prayer();
+		
+		try {
+			r = (Prayer) Ibatis.object("teamPrayer", search);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return r;
 	}
 	
 }
