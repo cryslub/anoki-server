@@ -21,12 +21,19 @@
 			TEAM.PICTURE,
 			TEAM.NAME,
 			TEAM.TEXT,
-			MEMBER.STATE,
-			(SELECT group_concat(USER.NAME ', ') FROM MEMBER 
+			MEMBER.STATE AS JOINED,
+			(SELECT GROUP_CONCAT(USER.NAME, ', ') FROM MEMBER 
 				LEFT OUTER JOIN USER ON USER.ID = MEMBER.USER
 				WHERE MEMBER.TEAM = TEAM.ID
-				AND (MEMBER.ROLE = 'L' OR MEMBER.ROLE = 'S') 
-			) AS LEADER			
+				AND (MEMBER.ROLE = '3' OR MEMBER.ROLE = '2') 
+			) AS LEADER,
+			(SELECT COUNT(USER) FROM MEMBER WHERE TEAM = TEAM.ID AND STATE = 'J') AS MEMBERCOUNT,
+			TEAM.SCOPE,
+			TEAM.JOIN_ACK AS JOINACK,
+			TEAM.PROFILE_AUTH AS PROFILEAUTH,
+			TEAM.REGISTER_AUTH AS REGISTERAUTH,
+			TEAM.INVITE_AUTH AS INVITEAUTH,
+			TEAM.LEAVE_AUTH AS LEAVEAUTH			
 		FROM TEAM
 		LEFT OUTER JOIN MEMBER ON TEAM.ID = MEMBER.TEAM AND MEMBER.USER = #id#  
 		WHERE TEAM.ID = #searchId#
@@ -57,5 +64,86 @@
 		BY PRAYER.TIME DESC
 		LIMIT #page#,#size#
 	</select>
+	
+	
+	<insert id="insertTeam" parameterClass="com.anoki.jaxb.Team">
+		INSERT INTO TEAM (
+			NAME,
+			PICTURE,
+			TEXT,
+			SCOPE,
+			JOIN_ACK
+		) VALUES (
+			#name#,
+			#picture#,
+			#text#,
+			#scope#,
+			#joinAck#
+		)
+		
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<insert id="insertFirstMember" parameterClass="com.anoki.jaxb.Team">
+		INSERT INTO MEMBER (
+			TEAM,
+			USER,
+			STATE,
+			ROLE
+		) VALUES (
+			#id#,
+			#userId#,
+			'J',
+			'3'
+		)
+	</insert>
+	
+	<insert id="insertMember" parameterClass="com.anoki.jaxb.Member">
+		INSERT INTO MEMBER (
+			TEAM,
+			USER
+		) VALUES (
+			#team#,
+			#user#
+		)
+	</insert>
+	
+	
+	<select id="teamMembers" parameterClass="com.anoki.jaxb.Search"
+		resultClass="com.anoki.jaxb.User">
+		SELECT
+			USER.PICTURE,
+			USER.NAME,
+			USER.ID
+		FROM MEMBER
+			LEFT OUTER JOIN USER ON MEMBER.USER = USER.ID
+		WHERE
+			MEMBER.TEAM = #searchId#
+			AND MEMBER.STATE = #searchKey#
+		LIMIT #page#,#size#
+	</select>
+	
+	<update id="updateMember" parameterClass="com.anoki.jaxb.Member">
+		UPDATE MEMBER SET ROLE = #role#
+		WHERE TEAM = #team#
+		AND USER = #user#
+	</update>
+
+	<update id="updateTeam" parameterClass="com.anoki.jaxb.Team">
+		UPDATE TEAM SET 
+		PICTURE = #picture#
+		, NAME = #name#
+		, TEXT = #text#
+		, SCOPE = #scope#
+		, JOIN_ACK = #joinAck#
+		, PROFILE_AUTH = #profileAuth#
+		, REGISTER_AUTH = #registerAuth#
+		, INVITE_AUTH = #inviteAuth#
+		, LEAVE_AUTH = #leaveAuth#		
+		WHERE ID = #id#
+	</update>
+
 	
 </sqlMap>

@@ -27,7 +27,7 @@ function send(id){
 	var form = $(id);
 	var formData = JSON.stringify(form.serializeObject());
 	$.ajax({
-	  type: "POST",
+	  type: form.attr("method"),
 	  url: form.attr("action"),
 	  data: formData,
 	  success: function(){},
@@ -46,8 +46,8 @@ function send(id){
 </div>
 
 <form id="login" enctype='application/json' action="/anoki/rest/auth/log" method="post">
-	number : <input name="number" value="01012345678"/>
-	country : <input name="country" value="82"/>
+	폰번호 number : <input name="number" value="01012345678"/>
+	국가코드 country : <input name="country" value="82"/>
 	device : <input name="device" value="12345678"/>
 	<input type="button" value="로그인" onClick="send('#login')"/>
 </form>
@@ -65,6 +65,19 @@ function send(id){
 	device : <input name="device" value="12345678"/>
 	auth : <input name="auth" value="1234"/>
 	<input type="button" value="인증번호전송" onClick="send('#authNumber')"/>
+</form>
+
+
+<form id="updateUser" enctype='application/json' action="/anoki/rest/user" method="put">
+	apiKey : <input name="apiKey" value="549918230"/>
+	사용자명 name : <input name="name" value="사용자명"/>	
+	picture : <input name="picture" value="-1"/>
+	문구 text : <input name="text" value="문구"/>
+	번호공개여부 showPhone(Y/N) : <input name="showPhone" value="Y"/>
+	계정 account : <input name="account" value="account@somewhere.com"/>
+	암호 pass : <input name="pass" value="1234"/>
+
+	<input type="button" value="사용자수정" onClick="send('#updateUser')"/>
 </form>
 
 
@@ -94,7 +107,7 @@ function send(id){
 
 <form id="sendMessage" enctype='application/json' action="/anoki/rest/etc/send/message" method="post">
 	apiKey : <input name="apiKey" value="549918230"/>
-	text : <input name="text" value="hi"/>
+	내용 text : <input name="text" value="hi"/>
 	back : <input name="back" value="ffffff"/>
 	user : <input name="user" value="2"/>	
 	<input type="button" value="메시지  전송" onClick="send('#sendMessage')"/>
@@ -102,10 +115,9 @@ function send(id){
 
 <form id="prayer" enctype='application/json' action="/anoki/rest/prayer" method="post">
 	apiKey : <input name="apiKey" value="549918230"/>
-	text : <input name="text" value="기도제목"/>
-	back : <input name="back" value="기도배경"/>
-	pub : <input name="pub" value="Y"/>	
-	
+	기도제목 text : <input name="text" value="기도제목"/>
+	기도배경 back : <input name="back" value="기도배경"/>
+	공개설정 (Y/N)pub : <input name="pub" value="Y"/>		
 	<input type="button" value="기도작성" onClick="send('#prayer')"/>
 </form>
 
@@ -168,7 +180,8 @@ function send(id){
 
 
 <form id="teamDetail" enctype='application/json' action="/anoki/rest/team/detail" method="post">
-	searchKey : <input name="searchKey" value="검색어"/>
+	apiKey : <input name="apiKey" value="549918230"/>
+	searchId : <input name="searchId" value="2"/>
 	<input type="button" value="그룹 상세 조회" onClick="send('#teamDetail')"/>
 </form>
 
@@ -178,7 +191,57 @@ function send(id){
 	searchId : <input name="searchId" value="2"/>	
 	page : <input name="page" value="0"/>
 	size : <input name="size" value="10"/>
-	<input type="button" value="그룹기도 조회" onClick="send('#userPrayer')"/>
+	<input type="button" value="그룹기도 조회" onClick="send('#teamPrayer')"/>
 </form>
+
+<form id="team" enctype='application/json' action="/anoki/rest/team" method="post">
+	apiKey : <input name="apiKey" value="549918230"/>
+	name : <input name="name" value="그룹명"/>	
+	picture : <input name="picture" value="-1"/>
+	text : <input name="text" value="소개"/>
+	공개설정 (전체공개P/이름만N/비밀S)scope : <input name="scope" value="P"/>
+	맴버 가입 승인 (Y/N)joinAck : <input name="joinAck" value="Y"/>
+
+	<input type="button" value="그룹 생성" onClick="send('#team')"/>
+</form>
+
+<form id="teamInvite" enctype='application/json' action="/anoki/rest/team/invite" method="post">
+	team : <input name="team" value="2"/>	
+
+	<input type="button" value="그룹원 초대" onClick="send('#teamInvite')"/>
+</form>
+
+<form id="teamMembers" enctype='application/json' action="/anoki/rest/team/members" method="post">
+	그룹 아이디 searchId : <input name="searchId" value="2"/>	
+	상태(가입/요청/초대) searchKey(J/R/I) : <input name="searchKey" value="J"/>
+	page : <input name="page" value="0"/>
+	size : <input name="size" value="10"/>
+
+	<input type="button" value="그룹원 조회" onClick="send('#teamMembers')"/>
+</form>
+
+<form id="updateMember" enctype='application/json' action="/anoki/rest/team/member" method="put">
+	그룹 아이디 team : <input name="team" value="2"/>	
+	user : <input name="user" value="3"/>	
+	역할(리더/청지기/일반)role(3/2/1) : <input name="role" value="3"/>	
+
+	<input type="button" value="그룹원 역할변경" onClick="send('#updateMember')"/>
+</form>
+
+
+<form id="updateTeam" enctype='application/json' action="/anoki/rest/team" method="put">
+	id : <input name="id" value="2"/>	
+	name : <input name="name" value="그룹명"/>	
+	picture : <input name="picture" value="-1"/>
+	text : <input name="text" value="소개"/>
+	공개설정 (전체공개P/이름만N/비밀S)scope : <input name="scope" value="P"/>
+	맴버 가입 승인 (Y/N)joinAck : <input name="joinAck" value="Y"/>
+	프로필 권한 (리더/청지기/일반)profileAuth(3/2/1) : <input name="profileAuth" value="3"/>
+	등록 권한 (리더/청지기/일반)registerAuth(3/2/1) : <input name="registerAuth" value="3"/>
+	초대 권한 (리더/청지기/일반)inviteAuth(3/2/1) : <input name="inviteAuth" value="3"/>
+	강퇴 권한 (리더/청지기/일반)leaveAuth(3/2/1) : <input name="leaveAuth" value="3"/>
+	<input type="button" value="그룹 수정" onClick="send('#updateTeam')"/>
+</form>
+
 
 </html>

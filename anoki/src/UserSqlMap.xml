@@ -21,7 +21,7 @@
 	<update id="updateUser" parameterClass="com.anoki.jaxb.User">
 		UPDATE USER SET NAME = #name#
 		,TEXT = #text#
-		,PICTURE = #media#
+		,PICTURE = #picture#
 		<isNotEmpty property="showPhone">
 		,SHOW_PHONE = #showPhone#
 		</isNotEmpty>
