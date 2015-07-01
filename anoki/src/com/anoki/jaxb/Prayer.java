@@ -22,9 +22,8 @@ public class Prayer {
 	public int userId;//사용자 id
 	public List<String> friends;
 	public List<Phone> phone;	
-	public String group;
 	public String scrapd;
 	public String responseCount;
 	public List<Reply> reply; //미디어 list
-	
+	public int team;
 }

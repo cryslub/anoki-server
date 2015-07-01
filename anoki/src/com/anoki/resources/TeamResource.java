@@ -225,4 +225,54 @@ public class TeamResource {
 		
 		return r;
 	}
+	
+	@POST
+	@Path("member/join")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response join(Member member) {
+		
+		
+		member.user = Keys.getUserId(member.apiKey);
+		
+		Response r = new Response();
+				
+		
+		try {
+			
+			Ibatis.insert("join", member);
+			r.result = "0";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return r;
+	}
+
+	
+	@PUT
+	@Path("member/state")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response memberState(Member member) {
+		
+				
+		Response r = new Response();
+				
+		
+		try {
+			
+			Ibatis.update("updateMemberState", member);
+			r.result = "0";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return r;
+	}
+	
 }

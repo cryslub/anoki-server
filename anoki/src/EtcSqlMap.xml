@@ -85,5 +85,47 @@
 			WHERE FRIEND.ID = #id#)
 	</insert>
 	
+	<select id="notice"
+		resultClass="com.anoki.jaxb.Notice">
+		SELECT
+			*
+		FROM NOTICE 
+		ORDER BY TIME DESC
+	</select>
+	
+	<select id="admin"
+		resultClass="com.anoki.jaxb.Admin">
+		SELECT
+			*
+		FROM ADMIN
+		WHERE ACCOUNT = #id# AND PASS=#pass# 
+	</select>
+	
+	<insert id="insertNotice" parameterClass="com.anoki.jaxb.Notice">
+		INSERT INTO NOTICE (
+			TEXT
+		) VALUES (#text#)
+		
+	</insert>
+	
+	<update id="updateNotice" parameterClass="com.anoki.jaxb.Notice">
+		UPDATE NOTICE SET TEXT = #text#
+		WHERE ID = #id#
+	</update>
+	
+	<delete id="deleteNotice" parameterClass="com.anoki.jaxb.Notice">
+		DELETE FROM NOTICE WHERE ID = #id#
+	</delete>
+
+
+	<update id="updateAccount" parameterClass="com.anoki.jaxb.Admin">
+		UPDATE ADMIN SET ACCOUNT = #id#
+	</update>
+
+	<update id="updatePass" parameterClass="com.anoki.jaxb.Admin">
+		UPDATE ADMIN SET PASS = #pass#
+	</update>
+	
+	
 	
 </sqlMap>

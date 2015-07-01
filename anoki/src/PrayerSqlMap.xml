@@ -15,7 +15,10 @@
 		PRAYER.ID AS ID,
 		PRAYER.USER AS USERID,
 		(SELECT COUNT(*) FROM PRAY WHERE PRAYER = PRAYER.ID) AS PRAYCOUNT,
-		(SELECT COUNT(*) FROM REPLY WHERE PRAYER = PRAYER.ID) AS REPLYCOUNT,
+		(SELECT COUNT(*) FROM REPLY 
+			WHERE PRAYER = PRAYER.ID
+			AND (PUBLIC = 'Y' OR USER = #id# OR USER.ID = #id#) 
+		) AS REPLYCOUNT,
 		(SELECT MAX(TIME) FROM PRAY WHERE PRAYER = PRAYER.ID AND USER=#id#) AS LASTPRAYED,
 		SCRAP.ID AS SCRAPD
 		FROM PRAYER
@@ -30,7 +33,7 @@
 		LIMIT #page#,#size#
 	</select>
 
-	<select id="getPrayer" parameterClass="com.anoki.jaxb.Prayer"
+	<select id="getPrayer" parameterClass="com.anoki.jaxb.Search"
 		resultClass="com.anoki.jaxb.Prayer">
 		SELECT
 		USER.PICTURE AS USERPICTURE,
@@ -41,25 +44,28 @@
 		PRAYER.ID AS ID,
 		PRAYER.USER AS USERID,
 		(SELECT COUNT(*) FROM PRAY WHERE PRAYER = PRAYER.ID) AS PRAYCOUNT,
-		(SELECT COUNT(*) FROM REPLY WHERE PRAYER = PRAYER.ID) AS REPLYCOUNT,
+		(SELECT COUNT(*) FROM REPLY 
+			WHERE PRAYER = PRAYER.ID
+			AND (PUBLIC = 'Y' OR USER = #id# OR USER.ID = #id#) 
+		) AS REPLYCOUNT,		
 		(SELECT COUNT(*) FROM REPLY WHERE PRAYER = PRAYER.ID AND TYPE='R') AS RESPONSECOUNT,		
-		(SELECT MAX(TIME) FROM PRAY WHERE PRAYER = PRAYER.ID AND USER=#userId#) AS LASTPRAYED,
+		(SELECT MAX(TIME) FROM PRAY WHERE PRAYER = PRAYER.ID AND USER=#id#) AS LASTPRAYED,
 		SCRAP.ID AS SCRAPD
 		FROM PRAYER
 		LEFT OUTER JOIN USER ON PRAYER.USER = USER.ID
-		LEFT OUTER JOIN SCRAP ON PRAYER.ID = SCRAP.PRAYER AND SCRAP.USER=#userId#
+		LEFT OUTER JOIN SCRAP ON PRAYER.ID = SCRAP.PRAYER AND SCRAP.USER=#id#
 		WHERE
-		PRAYER.ID = #id#
+		PRAYER.ID = #searchId#
 	</select>
 	
-	<select id="mediaList" parameterClass="com.anoki.jaxb.Prayer"
+	<select id="mediaList" parameterClass="com.anoki.jaxb.Search"
 		resultClass="String">
 		SELECT PATH FROM MEDIA
-		WHERE PRAYER = #id#
+		WHERE PRAYER = #searchId#
 	</select>
 
 	
-	<select id="replyList" parameterClass="com.anoki.jaxb.Prayer"
+	<select id="replyList" parameterClass="com.anoki.jaxb.Search"
 		resultClass="com.anoki.jaxb.Reply">
 		SELECT 
 			USER.NAME,
@@ -67,16 +73,23 @@
 			REPLY.TEXT,
 			REPLY.TIME,
 			REPLY.TYPE,
-			REPLY.PRIVATE AS PRVTE
+			REPLY.PUBLIC AS PUB,
+			USER.ID AS USERID
 		FROM REPLY
 		LEFT OUTER JOIN USER ON REPLY.USER = USER.ID
-		WHERE PRAYER = #id#
+		LEFT OUTER JOIN PRAYER ON REPLY.PRAYER = PRAYER.ID
+		WHERE REPLY.PRAYER = #searchId#
+		AND (
+			REPLY.PUBLIC = 'Y' 
+			OR REPLY.USER = #id# 
+			OR PRAYER.USER = #id#
+		)	
 	</select>
 
 
 	<insert id="insertPrayer" parameterClass="com.anoki.jaxb.Prayer">
 		INSERT INTO PRAYER (USER,BACK,TEXT,PUBLIC,TEAM) VALUES
-		(#userId#,#back#,#text#,#pub#,#group#)
+		(#userId#,#back#,#text#,#pub#,#team#)
 		
 		<selectKey keyProperty="id" resultClass="int">
 			SELECT LAST_INSERT_ID()
@@ -147,7 +160,9 @@
 		PRAYER.ID AS ID,
 		PRAYER.USER AS USERID,
 		(SELECT COUNT(*) FROM PRAY WHERE PRAYER = PRAYER.ID) AS PRAYCOUNT,
-		(SELECT COUNT(*) FROM REPLY WHERE PRAYER = PRAYER.ID) AS REPLYCOUNT,
+		(SELECT COUNT(*) FROM REPLY WHERE PRAYER = PRAYER.ID
+			AND (PUBLIC ='Y' OR USER = #id#)
+		) AS REPLYCOUNT,
 		(SELECT MAX(TIME) FROM PRAY WHERE PRAYER = PRAYER.ID AND USER=#id#) AS LASTPRAYED,
 		SCRAP.ID AS SCRAPD
 		FROM SCRAP
@@ -155,6 +170,9 @@
 		LEFT OUTER JOIN USER ON PRAYER.USER = USER.ID
 		WHERE
 		SCRAP.USER = #id#
+		<isEqual property="searchKey" compareValue="Y">
+			AND PRAYER.COMPLETED = 'Y'
+		</isEqual>
 		ORDER
 		BY PRAYER.TIME DESC
 		LIMIT #page#,#size#
@@ -173,19 +191,34 @@
 		PRAYER.ID AS ID,
 		PRAYER.USER AS USERID,
 		(SELECT COUNT(*) FROM PRAY WHERE PRAYER = PRAYER.ID) AS PRAYCOUNT,
-		(SELECT COUNT(*) FROM REPLY WHERE PRAYER = PRAYER.ID) AS REPLYCOUNT,
+		(SELECT COUNT(*) FROM REPLY WHERE PRAYER = PRAYER.ID 
+			AND (PUBLIC ='Y' OR USER = #id#)
+		) AS REPLYCOUNT,
 		(SELECT MAX(TIME) FROM PRAY WHERE PRAYER = PRAYER.ID AND USER=#id#) AS LASTPRAYED,
 		SCRAP.ID AS SCRAPD
 		FROM REQUEST
 		LEFT OUTER JOIN PRAYER ON PRAYER.ID = REQUEST.PRAYER
 		LEFT OUTER JOIN USER ON REQUEST.FRIEND = USER.ID
-		LEFT OUTER JOIN SCRAP ON PRAYER.ID = SCRAP.PRAYER AND SCRAP.USER=#id#
+		LEFT OUTER JOIN SCRAP ON PRAYER.ID = SCRAP.PRAYER AND REQUEST.USER=#id#
 		WHERE
 		REQUEST.FRIEND = #id#
 		ORDER
 		BY PRAYER.TIME DESC
 		LIMIT #page#,#size#
 	</select>
+	
+	
+	<insert id="insertReply" parameterClass="com.anoki.jaxb.Reply">
+		INSERT INTO REPLY(
+			PRAYER,
+			USER,
+			TEXT,
+			PUBLIC,
+			TYPE,
+			PICTURE
+		)
+		VALUES (#prayer#,#userId#,#text#,#pub#,#type#,#picture#)
+	</insert>
 	
 </sqlMap>
 

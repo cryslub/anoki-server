@@ -81,6 +81,23 @@ function send(id){
 </form>
 
 
+<form id="userDetail" enctype='application/json' action="/anoki/rest/user/detail" method="post">
+	id : <input name="id" value="2"/>	
+	<input type="button" value="사용지상세 조회" onClick="send('#userDetail')"/>
+</form>
+
+
+
+<form id="prayer" enctype='application/json' action="/anoki/rest/prayer" method="post">
+	apiKey : <input name="apiKey" value="549918230"/>
+	기도제목 text : <input name="text" value="기도제목"/>
+	기도배경 back : <input name="back" value="기도배경"/>
+	그룹 id team : <input name="team" value="2"/>	
+	공개설정 (Y/N)pub : <input name="pub" value="Y"/>		
+	<input type="button" value="기도작성" onClick="send('#prayer')"/>
+</form>
+
+
 <form id="recent" enctype='application/json' action="/anoki/rest/prayer/recent" method="post">
 	apiKey : <input name="apiKey" value="549918230"/>
 	page : <input name="page" value="0"/>
@@ -92,6 +109,16 @@ function send(id){
 	apiKey : <input name="apiKey" value="549918230"/>
 	<input type="button" value="알림 조회" onClick="send('#alarm')"/>
 </form>
+
+
+<form id="sendMessage" enctype='application/json' action="/anoki/rest/etc/send/message" method="post">
+	apiKey : <input name="apiKey" value="549918230"/>
+	내용 text : <input name="text" value="hi"/>
+	back : <input name="back" value="ffffff"/>
+	user : <input name="user" value="2"/>	
+	<input type="button" value="메시지  전송" onClick="send('#sendMessage')"/>
+</form>
+
 
 <form id="message" enctype='application/json' action="/anoki/rest/etc/message" method="post">
 	apiKey : <input name="apiKey" value="549918230"/>
@@ -105,27 +132,33 @@ function send(id){
 	<input type="button" value="친구 조회" onClick="send('#friend')"/>
 </form>
 
-<form id="sendMessage" enctype='application/json' action="/anoki/rest/etc/send/message" method="post">
+
+
+<form id="userPrayer" enctype='application/json' action="/anoki/rest/user/prayer" method="post">
 	apiKey : <input name="apiKey" value="549918230"/>
-	내용 text : <input name="text" value="hi"/>
-	back : <input name="back" value="ffffff"/>
-	user : <input name="user" value="2"/>	
-	<input type="button" value="메시지  전송" onClick="send('#sendMessage')"/>
+	사용자 ID searchId : <input name="searchId" value="2"/>	
+	완료여부 (Y/N) searchKey : <input name="searchKey" value="N"/>	
+	page : <input name="page" value="0"/>
+	size : <input name="size" value="10"/>
+	<input type="button" value="사용자기도 조회" onClick="send('#userPrayer')"/>
 </form>
 
-<form id="prayer" enctype='application/json' action="/anoki/rest/prayer" method="post">
-	apiKey : <input name="apiKey" value="549918230"/>
-	기도제목 text : <input name="text" value="기도제목"/>
-	기도배경 back : <input name="back" value="기도배경"/>
-	공개설정 (Y/N)pub : <input name="pub" value="Y"/>		
-	<input type="button" value="기도작성" onClick="send('#prayer')"/>
-</form>
 
 <form id="scrap" enctype='application/json' action="/anoki/rest/prayer/scrap" method="post">
 	apiKey : <input name="apiKey" value="549918230"/>
 	id : <input name="id" value="2"/>	
 	<input type="button" value="담기" onClick="send('#scrap')"/>
 </form>
+
+
+<form id="scrapdPrayer" enctype='application/json' action="/anoki/rest/prayer/scrapd" method="post">
+	apiKey : <input name="apiKey" value="549918230"/>
+	완료여부 (Y/N) searchKey : <input name="searchKey" value="N"/>	
+	page : <input name="page" value="0"/>
+	size : <input name="size" value="10"/>
+	<input type="button" value="담은 기도 조회" onClick="send('#scrapdPrayer')"/>
+</form>
+
 
 <form id="pray" enctype='application/json' action="/anoki/rest/prayer/pray" method="post">
 	apiKey : <input name="apiKey" value="549918230"/>
@@ -135,30 +168,22 @@ function send(id){
 
 <form id="prayerDetail" enctype='application/json' action="/anoki/rest/prayer/detail" method="post">
 	apiKey : <input name="apiKey" value="549918230"/>
-	id : <input name="id" value="2"/>	
+	searchId : <input name="searchId" value="2"/>	
 	<input type="button" value="기도상세 조회" onClick="send('#prayerDetail')"/>
 </form>
 
-<form id="userDetail" enctype='application/json' action="/anoki/rest/user/detail" method="post">
-	id : <input name="id" value="2"/>	
-	<input type="button" value="사용지상세 조회" onClick="send('#userDetail')"/>
-</form>
-
-<form id="userPrayer" enctype='application/json' action="/anoki/rest/user/prayer" method="post">
+<form id="reply" enctype='application/json' action="/anoki/rest/prayer/reply" method="post">
 	apiKey : <input name="apiKey" value="549918230"/>
-	searchId : <input name="searchId" value="2"/>	
-	page : <input name="page" value="0"/>
-	size : <input name="size" value="10"/>
-	<input type="button" value="사용자기도 조회" onClick="send('#userPrayer')"/>
+	기도 ID prayer : <input name="prayer" value="2"/>	
+	내용 text : <input name="text" value="댓글"/>	
+	사진 ID picture : <input name="picture" value="-1"/>	
+	구분(댓글/응답) type(S/R) : <input name="type" value="S"/>	
+	공개여부(Y/N) pub : <input name="pub" value="Y"/>	
+
+	<input type="button" value="댓글 작성" onClick="send('#reply')"/>
 </form>
 
 
-<form id="scrapdPrayer" enctype='application/json' action="/anoki/rest/prayer/scrapd" method="post">
-	apiKey : <input name="apiKey" value="549918230"/>
-	page : <input name="page" value="0"/>
-	size : <input name="size" value="10"/>
-	<input type="button" value="담은 기도 조회" onClick="send('#scrapdPrayer')"/>
-</form>
 
 
 <form id="requestedPrayer" enctype='application/json' action="/anoki/rest/prayer/request" method="post">
@@ -167,6 +192,20 @@ function send(id){
 	size : <input name="size" value="10"/>
 	<input type="button" value="기도 요청 조회" onClick="send('#requestedPrayer')"/>
 </form>
+
+
+
+<form id="team" enctype='application/json' action="/anoki/rest/team" method="post">
+	apiKey : <input name="apiKey" value="549918230"/>
+	name : <input name="name" value="그룹명"/>	
+	picture : <input name="picture" value="-1"/>
+	text : <input name="text" value="소개"/>
+	공개설정 (전체공개P/이름만N/비밀S)scope : <input name="scope" value="P"/>
+	맴버 가입 승인 (Y/N)joinAck : <input name="joinAck" value="Y"/>
+
+	<input type="button" value="그룹 생성" onClick="send('#team')"/>
+</form>
+
 
 <form id="userTeam" enctype='application/json' action="/anoki/rest/user/team" method="post">
 	apiKey : <input name="apiKey" value="549918230"/>
@@ -181,29 +220,20 @@ function send(id){
 
 <form id="teamDetail" enctype='application/json' action="/anoki/rest/team/detail" method="post">
 	apiKey : <input name="apiKey" value="549918230"/>
-	searchId : <input name="searchId" value="2"/>
+	그룹 ID searchId : <input name="searchId" value="2"/>
 	<input type="button" value="그룹 상세 조회" onClick="send('#teamDetail')"/>
 </form>
 
 
 <form id="teamPrayer" enctype='application/json' action="/anoki/rest/team/prayer" method="post">
 	apiKey : <input name="apiKey" value="549918230"/>
-	searchId : <input name="searchId" value="2"/>	
+	그룹 ID  searchId : <input name="searchId" value="2"/>	
 	page : <input name="page" value="0"/>
 	size : <input name="size" value="10"/>
 	<input type="button" value="그룹기도 조회" onClick="send('#teamPrayer')"/>
 </form>
 
-<form id="team" enctype='application/json' action="/anoki/rest/team" method="post">
-	apiKey : <input name="apiKey" value="549918230"/>
-	name : <input name="name" value="그룹명"/>	
-	picture : <input name="picture" value="-1"/>
-	text : <input name="text" value="소개"/>
-	공개설정 (전체공개P/이름만N/비밀S)scope : <input name="scope" value="P"/>
-	맴버 가입 승인 (Y/N)joinAck : <input name="joinAck" value="Y"/>
 
-	<input type="button" value="그룹 생성" onClick="send('#team')"/>
-</form>
 
 <form id="teamInvite" enctype='application/json' action="/anoki/rest/team/invite" method="post">
 	team : <input name="team" value="2"/>	
@@ -243,5 +273,35 @@ function send(id){
 	<input type="button" value="그룹 수정" onClick="send('#updateTeam')"/>
 </form>
 
+<form id="join" enctype='application/json' action="/anoki/rest/team/member/join" method="post">
+	apiKey : <input name="apiKey" value="549918230"/>
+	그룹 아이디 team : <input name="team" value="2"/>	
+	state(가입/신청) state(J/R) : <input name="state" value="J"/>	
 
+	<input type="button" value="그룹 가입" onClick="send('#join')"/>
+</form>
+
+
+<form id="updateMemberState" enctype='application/json' action="/anoki/rest/team/member/state" method="put">
+	user : <input name="user" value="3"/>	
+	그룹 아이디 team : <input name="team" value="2"/>	
+	state(가입/신청) state(J/B) : <input name="state" value="J"/>	
+
+	<input type="button" value="그룹원 상태 수정" onClick="send('#updateMemberState')"/>
+</form>
+
+<form id="updateFriendState" enctype='application/json' action="/anoki/rest/etc/friend" method="put">
+	apiKey : <input name="apiKey" value="549918230"/>
+
+	friend : <input name="friend" value="3"/>	
+	state(수락/차단) state(A/B) : <input name="state" value="A"/>	
+
+	<input type="button" value="친구 상태 수정" onClick="send('#updateFriendState')"/>
+</form>
+
+
+
+<form id="notice" enctype='application/json' action="/anoki/rest/etc/notice" method="post">
+	<input type="button" value="공지 조회" onClick="send('#notice')"/>
+</form>
 </html>

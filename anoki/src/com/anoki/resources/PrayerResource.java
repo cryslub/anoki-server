@@ -124,7 +124,7 @@ public class PrayerResource {
 			// save the file to the server
 			saveFile(fileInputStream, filePath);
 
-			r.id = id+"";
+			r.id = id;
 			r.result = "0";
 			
 			
@@ -213,17 +213,17 @@ public class PrayerResource {
 	@Path("detail")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Prayer detail(Prayer prayer) {
+	public Prayer detail(Search search) {
 		
 		
-		prayer.userId = Keys.getUserId(prayer.apiKey);
+		search.id = Keys.getUserId(search.apiKey);
 		
 		Prayer r = new Prayer();
 		
 		try {
-			r = (Prayer) Ibatis.object("getPrayer", prayer);
-			prayer.media = (List<String>) Ibatis.list("mediaList",prayer);
-			prayer.reply = (List<Reply>) Ibatis.list("replyList",prayer);
+			r = (Prayer) Ibatis.object("getPrayer", search);
+			r.media = (List<String>) Ibatis.list("mediaList",search);
+			r.reply = (List<Reply>) Ibatis.list("replyList",search);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -276,6 +276,28 @@ public class PrayerResource {
 		}
 
 		return result;
+	}
+	
+	@POST
+	@Path("reply")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response reply(Reply reply) {
+		Response r = new Response();
+		
+		reply.userId = Keys.getUserId(reply.apiKey);
+		
+		try {
+			Ibatis.insert("insertReply", reply);
+
+			r.result = "0";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return r;
 	}
 	
 	

@@ -22,11 +22,20 @@
 		SELECT
 			USER.PICTURE,
 			USER.NAME,
-			FRIEND.FRIEND	
+			FRIEND.FRIEND,
+			FRIEND.STATE	
 		FROM FRIEND 
 		LEFT OUTER JOIN USER ON FRIEND.FRIEND = USER.ID 
 		WHERE FRIEND.USER = #id#
 	</select>
+	
+	
+	<update id="updateFriend" parameterClass="com.anoki.jaxb.Friend">
+		UPDATE FRIEND SET STATE = #state#
+		WHERE (USER= #user# AND FRIEND = #friend#)
+		OR (FRIEND= #user# AND USER = #friend#)
+	</update>
+	
 	
 </sqlMap>
 

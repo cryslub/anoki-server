@@ -12,7 +12,7 @@ public class User {
 	public String showPhone;
 	public String account;
 	public String pass;
-	public int picture;
+	public Integer picture;
 	public String country;
 	public String phone;
 	

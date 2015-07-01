@@ -52,7 +52,10 @@
 		PRAYER.ID AS ID,
 		PRAYER.USER AS USERID,
 		(SELECT COUNT(*) FROM PRAY WHERE PRAYER = PRAYER.ID) AS PRAYCOUNT,
-		(SELECT COUNT(*) FROM REPLY WHERE PRAYER = PRAYER.ID) AS REPLYCOUNT,
+		(SELECT COUNT(*) FROM REPLY 
+			WHERE PRAYER = PRAYER.ID
+			AND (PUBLIC = 'Y' OR USER = #id# OR USER.ID = #id#) 
+		) AS REPLYCOUNT,
 		(SELECT MAX(TIME) FROM PRAY WHERE PRAYER = PRAYER.ID AND USER=#id#) AS LASTPRAYED,
 		SCRAP.ID AS SCRAPD
 		FROM PRAYER
@@ -145,5 +148,21 @@
 		WHERE ID = #id#
 	</update>
 
+	<insert id="join" parameterClass="com.anoki.jaxb.Member">
+		INSERT INTO MEMBER (
+			TEAM,
+			USER,
+			STATE
+		) VALUES (
+			#team#,
+			#user#,
+			#state#
+		)
+	</insert>
 	
+	<update id="updateMemberState" parameterClass="com.anoki.jaxb.Member">
+		UPDATE MEMBER SET STATE = #state#
+		WHERE TEAM = #team#
+		AND USER = #user#
+	</update>
 </sqlMap>
