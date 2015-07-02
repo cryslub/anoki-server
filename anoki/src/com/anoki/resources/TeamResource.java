@@ -17,7 +17,7 @@ import com.anoki.jaxb.Prayer;
 import com.anoki.jaxb.Response;
 import com.anoki.jaxb.Search;
 import com.anoki.jaxb.Team;
-import com.anoki.jaxb.TeamInvite;
+import com.anoki.jaxb.Invite;
 import com.anoki.jaxb.User;
 import com.anoki.singleton.Ibatis;
 import com.anoki.singleton.Keys;
@@ -122,7 +122,7 @@ public class TeamResource {
 	@Path("invite")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response invite(TeamInvite teamInvite) {
+	public Response invite(Invite teamInvite) {
 		
 		Response r = new Response();
 		

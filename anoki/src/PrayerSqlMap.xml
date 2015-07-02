@@ -109,11 +109,9 @@
 	<insert id="insertRequest" parameterClass="com.anoki.jaxb.Prayer">
 		INSERT INTO REQUEST (
 			PRAYER,
-			FRIEND
+			USER
 		) VALUES 
-		<iterate prepend="VALUES" conjunction=", " property="friends">
-			(#id#, #friends[]#)
-		</iterate>
+		<iterate  conjunction=", " property="friends">(#id#, #friends[]#)</iterate>
 	</insert>
 	
 	
@@ -198,10 +196,10 @@
 		SCRAP.ID AS SCRAPD
 		FROM REQUEST
 		LEFT OUTER JOIN PRAYER ON PRAYER.ID = REQUEST.PRAYER
-		LEFT OUTER JOIN USER ON REQUEST.FRIEND = USER.ID
+		LEFT OUTER JOIN USER ON PRAYER.USER = USER.ID
 		LEFT OUTER JOIN SCRAP ON PRAYER.ID = SCRAP.PRAYER AND REQUEST.USER=#id#
 		WHERE
-		REQUEST.FRIEND = #id#
+		REQUEST.USER = #id#
 		ORDER
 		BY PRAYER.TIME DESC
 		LIMIT #page#,#size#

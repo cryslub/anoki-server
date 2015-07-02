@@ -5,10 +5,18 @@
 <sqlMap namespace="friend">
 
 	
-	<update id="acceptFriendRquest" parameterClass="String">
+	<update id="acceptFriendRequest" parameterClass="String">
 		UPDATE FRIEND SET STATE = 'A'
 		WHERE ID = #id#
 	</update>
+	
+	<select id="checkFriend" parameterClass="com.anoki.jaxb.Friend" resultClass="int">
+		SELECT ID FROM FRIEND
+		WHERE (USER = #user# AND FRIEND = #friend#)
+		OR (FRIEND = #user# AND USER = #friend#)
+		
+	</select>
+	
 	
 	
 	<insert id="insertFriend" parameterClass="com.anoki.jaxb.Friend">
@@ -36,6 +44,20 @@
 		OR (FRIEND= #user# AND USER = #friend#)
 	</update>
 	
+	<insert id="addFriend" parameterClass="com.anoki.jaxb.Invite">
+		INSERT INTO FRIEND(
+			USER,FRIEND
+		) 
+		SELECT
+			#id#, 
+			ID 
+		FROM USER 
+		WHERE CONCAT(COUNTRY,PHONE) IN
+		<iterate  property="phone" open="("
+			conjunction="," close=")">
+			CONCAT(#phone[].country#, #phone[].number#)
+		</iterate>
+	</insert>
 	
 </sqlMap>
 

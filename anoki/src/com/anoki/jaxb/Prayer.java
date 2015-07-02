@@ -20,7 +20,7 @@ public class Prayer {
 	public int id;//id
 	public String lastPrayed;//마지막 기도시간
 	public int userId;//사용자 id
-	public List<String> friends;
+	public List<Integer> friends;
 	public List<Phone> phone;	
 	public String scrapd;
 	public String responseCount;

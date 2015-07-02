@@ -45,9 +45,9 @@ public class PrayerResource {
 		
 		List<Prayer> result = new ArrayList<Prayer>();
 		try {
-			result = (List<Prayer>) Ibatis.smc.queryForList("recent",search);
+			result = (List<Prayer>) Ibatis.list("recent",search);
 			for(Prayer prayer : result){
-				prayer.media = (List<String>) Ibatis.smc.queryForList("mediaList",prayer);
+				prayer.media = (List<String>) Ibatis.list("mediaList",search);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -71,23 +71,32 @@ public class PrayerResource {
 				Ibatis.insert("updateMedia", prayer);
 		
 			if(prayer.phone != null){
-				if(prayer.friends == null) prayer.friends = new ArrayList<String> ();
+				if(prayer.friends == null) prayer.friends = new ArrayList<Integer> ();
 				
 				for(Phone phone : prayer.phone){	
-					int id = (Integer) Ibatis.smc.insert("insertUser",phone);
-					prayer.friends.add(id+"");
+					Integer id = (Integer) Ibatis.object("checkUser", phone);
+					
+					if(id == null){
+						id = (Integer) Ibatis.smc.insert("insertUser",phone);
+					}
+					
+					prayer.friends.add(id);
 					
 					Friend friend = new Friend();
 					friend.user = prayer.userId;
 					friend.friend = id;
 					
-					Ibatis.insert("insertFriend", friend);
+					Object obj= Ibatis.object("checkFriend", friend);
+					
+					if(obj == null){					
+						Ibatis.insert("insertFriend", friend);
+					}
 				}
 			}
 
 			if(prayer.friends != null && prayer.friends.size()>0){
 				Ibatis.insert("insertRequest", prayer);
-				Ibatis.insert("insertAlarm", prayer);
+				Ibatis.insert("insertRequestAlarm", prayer);
 
 			}
 

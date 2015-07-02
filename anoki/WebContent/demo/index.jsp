@@ -2,7 +2,12 @@
     pageEncoding="UTF-8"%>
     
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
-
+<style>
+	textarea{
+		width:900px;
+		height:100px;
+	}
+</style>
 <script language="javascript" type="text/javascript" src="jquery-1.11.3.min.js"></script>  
 <script>
 
@@ -38,6 +43,24 @@ function send(id){
 	  }
 	});
 }
+
+
+
+function sendJson(id){	
+	var form = $(id);
+	$.ajax({
+	  type: form.attr("method"),
+	  url: form.attr("action"),
+	  data: form.find("textarea").val(),
+	  success: function(){},
+	  dataType: "json",
+	  contentType : "application/json",
+	  success:function(response){
+		  $("#response").html(JSON.stringify(response));
+	  }
+	});
+}
+
 
 </script>
 
@@ -93,10 +116,17 @@ function send(id){
 	기도제목 text : <input name="text" value="기도제목"/>
 	기도배경 back : <input name="back" value="기도배경"/>
 	그룹 id team : <input name="team" value="2"/>	
-	공개설정 (Y/N)pub : <input name="pub" value="Y"/>		
+	공개설정 (Y/N)pub : <input name="pub" value="Y"/> <br/>
+
 	<input type="button" value="기도작성" onClick="send('#prayer')"/>
 </form>
 
+
+<form id="prayerJson" enctype='application/json' action="/anoki/rest/prayer" method="post">
+	<textarea>{"apiKey":"549918230","text":"기도제목","back":"기도배경","team":"2","pub":"Y","friends":[4,5,],"phone":[{"number":"0103224555","country":"82"},{"number":"0102223455","country":"82"}]}
+	</textarea>
+	<input type="button" value="기도작성" onClick="sendJson('#prayerJson')"/>
+</form>
 
 <form id="recent" enctype='application/json' action="/anoki/rest/prayer/recent" method="post">
 	apiKey : <input name="apiKey" value="549918230"/>
@@ -234,11 +264,10 @@ function send(id){
 </form>
 
 
-
-<form id="teamInvite" enctype='application/json' action="/anoki/rest/team/invite" method="post">
-	team : <input name="team" value="2"/>	
-
-	<input type="button" value="그룹원 초대" onClick="send('#teamInvite')"/>
+<form id="teamInvite" enctype='application/json' action="/anoki/rest/prayer" method="post">
+	<textarea>{"team":2,"friends":[4,5,],"phone":[{"number":"0103224555","country":"82"},{"number":"0102223455","country":"82"}]}
+	</textarea>
+	<input type="button" value="그룹원 초대" onClick="sendJson('#teamInvite')"/>
 </form>
 
 <form id="teamMembers" enctype='application/json' action="/anoki/rest/team/members" method="post">
@@ -299,6 +328,12 @@ function send(id){
 	<input type="button" value="친구 상태 수정" onClick="send('#updateFriendState')"/>
 </form>
 
+
+<form id="addFriend" enctype='application/json' action="/anoki/rest/friend" method="post">
+	<textarea>{"apiKey":"549918230","phone":[{"number":"0103224555","country":"82"},{"number":"0102223455","country":"82"}]}
+	</textarea>
+	<input type="button" value="친구추가" onClick="sendJson('#addFriend')"/>
+</form>
 
 
 <form id="notice" enctype='application/json' action="/anoki/rest/etc/notice" method="post">

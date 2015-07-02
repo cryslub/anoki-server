@@ -12,7 +12,7 @@
 			NAME1,
 			NAME2,			
 			TIME,
-			MEDIA
+			PICTURE
 		FROM ALARM 
 		WHERE USER = #id#
 	</select>
@@ -55,16 +55,19 @@
 			USER,
 			TYPE,
 			NAME1,
-			MEDIA
-		) VALUES 
-		<iterate prepend="VALUES" conjunction=", " property="friends">
-			<![CDATA[
-			(#friends[]#, 
-			'Q',
-			SELECT NAME FROM USER WHERE ID = #userId#,
-			SELECT PICTURE FRPOM USER WHERE ID = #userId#)
-			]]>
+			PICTURE
+		) 
+		SELECT 
+			ID , 
+			'Q', 
+			(SELECT NAME FROM USER WHERE ID = #userId#), 
+			(SELECT PICTURE FROM USER WHERE ID = #userId#)
+		FROM USER
+		WHERE ID IN(
+		<iterate  conjunction=", " property="friends">
+			#friends[]# 
 		</iterate>
+		)
 	</insert>
 	
 	
@@ -73,16 +76,15 @@
 			USER,
 			TYPE,
 			NAME1,
-			MEDIA
-		) VALUES 
-		(SELECT USER FROM FRIEND WHERE ID = #id#, 
-		'F',
-		SELECT USER.NAME 
-			FROM FRIEND LEFT OUTER JOIN USER ON FRIEND.FRIEND = USER.ID 
-			WHERE FRIEND.ID = #id#,
-		SELECT USER.PICTURE 
-			FROM FRIEND LEFT OUTER JOIN USER ON FRIEND.FRIEND = USER.ID 
-			WHERE FRIEND.ID = #id#)
+			PICTURE
+		) 
+		SELECT 
+			USER.ID,
+			'F',
+			USER.NAME,
+			USER.PICTURE
+		FROM FRIEND LEFT OUTER JOIN USER ON FRIEND.FRIEND = USER.ID
+		WHERE FRIEND.ID = #id#
 	</insert>
 	
 	<select id="notice"
