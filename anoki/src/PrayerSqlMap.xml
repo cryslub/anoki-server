@@ -118,7 +118,7 @@
 	
 	
 	
-	<insert id="insertMedia">
+	<insert id="insertMedia" parameterClass="com.anoki.jaxb.User">
 		INSERT INTO MEDIA () VALUES ()
 		
 		<selectKey keyProperty="id" resultClass="int">

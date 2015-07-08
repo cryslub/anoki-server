@@ -38,6 +38,15 @@ public class Ibatis {
 		
 	}
 	
+	public static int insert(String id) throws SQLException{
+		
+		Object obj =smc.insert(id);
+		if(obj != null) return (Integer) obj;
+		else return -1;
+		
+	}
+	
+	
 	public static void update(String id,Object arg) throws SQLException{
 		smc.update(id,arg);
 	}

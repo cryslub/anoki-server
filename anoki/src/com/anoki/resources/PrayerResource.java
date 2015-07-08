@@ -23,6 +23,7 @@ import com.anoki.jaxb.Prayer;
 import com.anoki.jaxb.Reply;
 import com.anoki.jaxb.Response;
 import com.anoki.jaxb.Search;
+import com.anoki.jaxb.User;
 import com.anoki.singleton.Ibatis;
 import com.anoki.singleton.Keys;
 import com.sun.jersey.core.header.FormDataContentDisposition;
@@ -116,17 +117,21 @@ public class PrayerResource {
 	@POST
 	@Path("upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile(
-			@FormDataParam("file") InputStream fileInputStream,
+
+	public String uploadFile(
+			@FormDataParam("uploaded") InputStream fileInputStream,
 			@FormDataParam("file") FormDataContentDisposition contentDispositionHeader) {
 
 		Response r = new Response();
+		r.id = -1;
 		r.result = "0";
 
 		String imagePath = context.getRealPath("")+"/images/";
 		
 		try {
-			int id = Ibatis.insert("insertMedia", null);
+			
+			User user = new User();
+			int id = Ibatis.insert("insertMedia",user);
 			
 			String filePath = imagePath	+ id;
 
@@ -145,7 +150,7 @@ public class PrayerResource {
 
 		
 
-		return r;
+		return r.id+"";
 
 	}
 
@@ -154,7 +159,7 @@ public class PrayerResource {
 			String serverLocation) {
 
 		try {
-			OutputStream outpuStream = new FileOutputStream(new File(serverLocation));
+			OutputStream outpuStream = new FileOutputStream(serverLocation);
 			int read = 0;
 			byte[] bytes = new byte[1024];
 
