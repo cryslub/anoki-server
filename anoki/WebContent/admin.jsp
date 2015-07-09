@@ -62,7 +62,7 @@ Admin 암호 변경
 공지 관리 
 
 <form action="addNotice.jsp" method="post">
-	<input name="text" size=200/> <input type="submit" value="공지 추가">
+	공지 내용 : <input name="text" size=200/> <input type="submit" value="공지 추가">
 </form>
 
 <%
@@ -70,7 +70,7 @@ Admin 암호 변경
 %>
 	<form action="editNotice.jsp" method="post">
 		<input type="hidden" name="id" value="<%=notice.id%>"/>
-		<input name="text" value="<%=notice.text%>" size=200/> 
+		공지 내용 : <input name="text" value="<%=notice.text%>" size=200/> 
 		<input type="submit" value="수정">
 	</form>
 	<form action="deleteNotice.jsp" method="post">
