@@ -68,27 +68,32 @@ function sendJson(id){
 
 </div>
 
-<form id="login" enctype='application/json' action="/anoki/rest/auth/log" method="post">
-	폰번호 number : <input name="number" value="01012345678"/>
-	국가코드 country : <input name="country" value="82"/>
-	device : <input name="device" value="12345678"/>
+<form id="login" enctype='application/json' action="/anoki/rest/user/log" method="post">
+	계정 account : <input name="account" value="someone@somewhere.com"/>
+	암호 pass : <input name="pass" value="dkfeweql@3!"/>
 	<input type="button" value="로그인" onClick="send('#login')"/>
 </form>
 
-<form id="requestAuth" enctype='application/json' action="/anoki/rest/auth/request" method="post">
-	number : <input name="number" value="01012345678"/>
-	country : <input name="country" value="82"/>
-	device : <input name="device" value="12345678"/>
-	<input type="button" value="인증요청" onClick="send('#requestAuth')"/>
+<form id="user" enctype='application/json' action="/anoki/rest/user" method="post">
+	계정 account : <input name="account" value="someone@somewhere.com"/>
+	암호 pass : <input name="pass" value="dkfeweql@3!"/>
+	국가번호 country: <input name="country" value="82"/>
+	전화번호 phone: <input name="phone" value="01012345678"/>
+	<input type="button" value="계정생성" onClick="send('#user')"/>
 </form>
 
-<form id="authNumber" enctype='application/json' action="/anoki/rest/auth/send/number" method="post">
-	number : <input name="number" value="01012345678"/>
-	country : <input name="country" value="82"/>
-	device : <input name="device" value="12345678"/>
-	auth : <input name="auth" value="1234"/>
-	<input type="button" value="인증번호전송" onClick="send('#authNumber')"/>
+<form id="account" enctype='application/json' action="/anoki/rest/auth/account" method="post">
+	국가번호 country: <input name="country" value="82"/>
+	전화번호 phone: <input name="number" value="01012345678"/>
+	<input type="button" value="계정확인" onClick="send('#account')"/>
 </form>
+
+<form id="pass" enctype='application/json' action="/anoki/rest/auth/pass" method="post">
+	계정 account : <input name="account" value="someone@somewhere.com"/>
+	암호 pass : <input name="pass" value="dkfeweql@3!"/>
+	<input type="button" value="암호확인" onClick="send('#pass')"/>
+</form>
+
 
 
 <form id="updateUser" enctype='application/json' action="/anoki/rest/user" method="put">
@@ -97,9 +102,10 @@ function sendJson(id){
 	picture : <input name="picture" value="-1"/>
 	문구 text : <input name="text" value="문구"/>
 	번호공개여부 showPhone(Y/N) : <input name="showPhone" value="Y"/>
-	계정 account : <input name="account" value="account@somewhere.com"/>
-	암호 pass : <input name="pass" value="1234"/>
-
+	암호 pass : <input name="pass" value="felawef#@"/>
+	국가번호 country: <input name="country" value="82"/>
+	전화번호 phone: <input name="phone" value="01012345678"/>
+	
 	<input type="button" value="사용자수정" onClick="send('#updateUser')"/>
 </form>
 
@@ -334,6 +340,8 @@ function sendJson(id){
 	</textarea>
 	<input type="button" value="친구추가" onClick="sendJson('#addFriend')"/>
 </form>
+
+
 
 
 <form id="notice" enctype='application/json' action="/anoki/rest/etc/notice" method="post">

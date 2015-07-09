@@ -10,9 +10,9 @@ import javax.ws.rs.core.MediaType;
 
 import com.anoki.jaxb.Phone;
 import com.anoki.jaxb.Response;
+import com.anoki.jaxb.User;
 import com.anoki.singleton.AuthCodes;
 import com.anoki.singleton.Ibatis;
-import com.anoki.singleton.Keys;
 
 
 @Path("auth")
@@ -68,7 +68,6 @@ public class AuthResource {
 				}
 				
 				
-				r.apiKey = logIn(id);
 
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -82,20 +81,41 @@ public class AuthResource {
 		return r;
 	}
 	
+	
 	@POST
-	@Path("log")
+	@Path("account")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)	
-	public Response log(Phone phone){
+	public Response account(Phone phone){
 		
 		Response r = new Response();
 		
 		try {
-			Integer id = (Integer) Ibatis.smc.queryForObject("getUserId",phone);
+			r.result = (String) Ibatis.object("getAccountWithPhone",phone);
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return r;
+	}
+	
+	@POST
+	@Path("pass")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)	
+	public Response pass(User user){
+		
+		Response r = new Response();
+		
+		try {
+			Integer id = (Integer) Ibatis.object("getUserId",user);
 			
-			r.id = id;
-			r.apiKey = logIn(id);
-			r.result="0";
+			if(id!=null){
+				r.id = id;
+				r.result="0";
+			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -105,21 +125,24 @@ public class AuthResource {
 		return r;
 	}
 	
-	
-	private String logIn(int id){
-		//로그인 처리
-
-		Integer user = 0;
-		Integer key=0;
-		while(user != null){
-			key = (int)(Math.random() * 1000000000);
-			user = Keys.map.get(key);				
+	@POST
+	@Path("bind")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)	
+	public Response bind(User user){
+		
+		Response r = new Response();
+		
+		try {
+			Ibatis.update("bindPhone",user);
+				r.result="0";
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
-		//생성된 db의 user id 가져오기\
-		user = id;
-		Keys.map.put(key,user);
-		
-		return key+"";
+		return r;
 	}
+	
 }

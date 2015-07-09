@@ -100,7 +100,7 @@
 	<update id="updateMedia" parameterClass="com.anoki.jaxb.Prayer">
 		UPDATE MEDIA SET PRAYER = #id#
 		WHERE ID IN
-		<iterate  property="media" open="("
+		<iterate  property="media" open="(
 			conjunction="," close=")">
 			#media[]#
 		</iterate>

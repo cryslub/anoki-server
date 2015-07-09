@@ -75,7 +75,7 @@ public class PrayerResource {
 				if(prayer.friends == null) prayer.friends = new ArrayList<Integer> ();
 				
 				for(Phone phone : prayer.phone){	
-					Integer id = (Integer) Ibatis.object("checkUser", phone);
+					Integer id = (Integer) Ibatis.object("getIdWithPhone", phone);
 					
 					if(id == null){
 						id = (Integer) Ibatis.smc.insert("insertUser",phone);

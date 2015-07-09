@@ -3,10 +3,10 @@
     "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="user">
-	<insert id="insertUser" parameterClass="com.anoki.jaxb.Phone">
+	<insert id="insertUser" parameterClass="com.anoki.jaxb.User">
 
-		INSERT INTO USER (COUNTRY,PHONE,DEVICE) VALUES
-		(#country#,#number#,#device#)
+		INSERT INTO USER (ACCOUNT,PASS,COUNTRY,PHONE) VALUES
+		(#account#,#pass#,#country#,#phone#)
 
 		<selectKey keyProperty="id" resultClass="int">
 			SELECT LAST_INSERT_ID()
@@ -27,22 +27,43 @@
 		<isNotEmpty property="showPhone">
 		,SHOW_PHONE = #showPhone#
 		</isNotEmpty>
-		<isNotEmpty property="account">		
-		,ACCOUNT = #account#
-		</isNotEmpty>
 		<isNotEmpty property="pass">		
 		,PASS = #pass#
 		</isNotEmpty>
+		<isNotEmpty property="phone">		
+		,PHONE = #phone#
+		</isNotEmpty>
+		<isNotEmpty property="country">		
+		,COUNTRY = #country#
+		</isNotEmpty>
+
 		WHERE ID = #id#
 	</update>
 
+
+	<update id="bindPhone" parameterClass="com.anoki.jaxb.User">
+		UPDATE USER SET PHONE = '', COUNTRY=''
+		WHERE ACCOUNT != #account#
+		AND PHONE = #phone#
+		AND COUNTRY = #country#
+	</update>
 	
-	<select id="checkUser" parameterClass="com.anoki.jaxb.Phone" resultClass="int">
+	
+	<select id="checkUser" parameterClass="com.anoki.jaxb.User" resultClass="int">
+		SELECT ID FROM USER WHERE ACCOUNT=#account#
+	</select>
+	
+	
+	<select id="getIdWithPhone" parameterClass="com.anoki.jaxb.Phone" resultClass="int">
 		SELECT ID FROM USER WHERE COUNTRY=#country# AND PHONE=#number#
 	</select>
 	
-	<select id="getUserId" parameterClass="com.anoki.jaxb.Phone" resultClass="int">
-		SELECT ID FROM USER WHERE COUNTRY=#country# AND PHONE=#number# AND DEVICE=#device#
+	<select id="getAccountWithPhone" parameterClass="com.anoki.jaxb.Phone" resultClass="string">
+		SELECT ACCOUNT FROM USER WHERE COUNTRY=#country# AND PHONE=#number#
+	</select>
+	
+	<select id="getUserId" parameterClass="com.anoki.jaxb.User" resultClass="int">
+		SELECT ID FROM USER WHERE ACCOUNT=#account# AND PASS=#pass#
 	</select>
 	
 	

@@ -22,6 +22,37 @@ import com.anoki.singleton.Keys;
 @Path("user")
 public class UserResource {
 
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)	
+	public Response post(User user){
+		
+		
+		Response r = new Response();
+		
+		try {
+			
+			Integer id  =Ibatis.insert("checkUser",user);
+			if(id == null){
+				r.id = Ibatis.insert("insertUser",user);
+				Ibatis.update("bindPhone",user);
+
+				r.result = "0";		
+				r.apiKey = logIn(r.id);
+			}else{
+				r.result = "2";
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return r;
+	}
+	
+	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)	
@@ -107,4 +138,44 @@ public class UserResource {
 		return result;
 	}
 	
+	@POST
+	@Path("log")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)	
+	public Response log(User user){
+		
+		Response r = new Response();
+		
+		try {
+			Integer id = (Integer) Ibatis.object("getUserId",user);
+			
+			r.id = id;
+			r.apiKey = logIn(id);
+			r.result="0";
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return r;
+	}
+	
+	
+	private String logIn(int id){
+		//로그인 처리
+
+		Integer user = 0;
+		Integer key=0;
+		while(user != null){
+			key = (int)(Math.random() * 1000000000);
+			user = Keys.map.get(key);				
+		}
+		
+		//생성된 db의 user id 가져오기\
+		user = id;
+		Keys.map.put(key,user);
+		
+		return key+"";
+	}
 }
