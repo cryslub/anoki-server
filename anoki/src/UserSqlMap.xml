@@ -103,7 +103,7 @@
 		LEFT OUTER JOIN SCRAP ON PRAYER.ID = SCRAP.PRAYER AND SCRAP.USER=#id#
 		WHERE
 		PRAYER.USER = #searchId#
-		AND PRAYER.TEAM = NULL
+		AND PRAYER.TEAM = -1
 		<isEqual property="searchKey" compareValue="Y">
 			AND PRAYER.COMPLETED = 'Y'
 		</isEqual>

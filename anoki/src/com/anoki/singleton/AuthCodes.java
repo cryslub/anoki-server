@@ -4,5 +4,5 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AuthCodes {
-	public static Map<String,Integer> map = new HashMap<String,Integer>();
+	public static Map<String,String> map = new HashMap<String,String>();
 }
