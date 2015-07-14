@@ -100,6 +100,26 @@ public class PrayerResource {
 				Ibatis.insert("insertRequestAlarm", prayer);
 
 			}
+			
+			User user = new User();
+			user.id = prayer.userId;
+			user.dalant = prayer.dalant;
+			
+			if(user.dalant >= 0){
+				Ibatis.insert("charge",user);
+			}
+
+			if(prayer.friends.size() > 10){
+				int size = prayer.friends.size();
+				size -= 10;
+				prayer.spend = size * 10;
+				user.dalant -= prayer.spend;
+				Ibatis.insert("spend",prayer);	
+			}
+			
+			if(user.dalant != 0){
+				Ibatis.update("addDalant", user);
+			}
 
 			
 		} catch (SQLException e) {

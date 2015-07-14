@@ -256,7 +256,7 @@ function sendJson(id){
 	text : <input name="text" value="소개"/>
 	공개설정 (전체공개P/이름만N/비밀S)scope : <input name="scope" value="P"/>
 	맴버 가입 승인 (Y/N)joinAck : <input name="joinAck" value="Y"/>
-
+	월 결제 달란트 dalant  <input name="dalant" value="2000"/>
 	<input type="button" value="그룹 생성" onClick="send('#team')"/>
 </form>
 
@@ -359,7 +359,17 @@ function sendJson(id){
 	<input type="button" value="친구추가" onClick="sendJson('#addFriend')"/>
 </form>
 
+<form id="charge" enctype='application/json' action="/anoki/rest/user/charge" method="post">
+	apiKey : <input name="apiKey" value="549918230"/>
+	dalant : <input name="dalant" value="1000"/>	
+	<input type="button" value="충전" onClick="send('#charge')"/>
+</form>
 
+
+<form id="dalant" enctype='application/json' action="/anoki/rest/user/dalant" method="post">
+	apiKey : <input name="apiKey" value="549918230"/>
+	<input type="button" value="달란트 내역조회" onClick="send('#dalant')"/>
+</form>
 
 
 <form id="notice" enctype='application/json' action="/anoki/rest/etc/notice" method="post">

@@ -76,7 +76,8 @@
 			ACCOUNT,
 			SHOW_PHONE AS SHOWPHONE,
 			COUNTRY,
-			PHONE
+			PHONE,
+			DALANT
 		 FROM USER WHERE ID = #id#
 	</select>
 	
@@ -124,6 +125,23 @@
 		LEFT OUTER JOIN TEAM ON MEMBER.TEAM = TEAM.ID
 		WHERE MEMBER.USER = #id#
 		AND MEMBER.STATE = 'J'
+	</select>
+	
+	<update id="addDalant" parameterClass="com.anoki.jaxb.User">
+		UPDATE USER
+		SET DALANT = DALANT + (#dalant#)
+		WHERE ID = #id#
+	</update>
+	
+	<update id="spendTeamDalant" parameterClass="com.anoki.jaxb.Team">
+		UPDATE USER
+		SET DALANT = DALANT - (#dalant#)
+		WHERE ID = #leaderId#
+	</update>
+	
+	<select id="dalant" parameterClass="com.anoki.jaxb.Search"
+		resultClass="com.anoki.jaxb.Dalant">
+		SELECT * FROM DALANT WHERE USER = #id#
 	</select>
 	
 </sqlMap>

@@ -165,4 +165,37 @@
 		WHERE TEAM = #team#
 		AND USER = #user#
 	</update>
+	
+	<select id="bigTeamList" resultClass="com.anoki.jaxb.Team">
+		SELECT 
+			TEAM.ID,
+			TEAM.DALANT,
+			MEMBER.USER AS LEADERID,
+			USER.DALANT AS LEADERDALANT
+		FROM TEAM
+		LEFT OUTER JOIN MEMBER ON TEAM.ID = MEMBER.TEAM AND MEMBER.ROLE =3 
+		LEFT OUTER JOIN USER ON MEMBER.USER = USER.ID
+		WHERE TEAM.DALANT > 0
+		AND TEAM.PAYED = 'N'
+		
+	</select>
+	
+	<update id="resetPayed">
+		UPDATE TEAM SET PAYED = 'N'
+		WHERE DAYOFMONTH( NOW() )  = PAY_DAY
+	</update>
+	
+	<update id="paySucceed" parameterClass="com.anoki.jaxb.Team">
+		UPDATE TEAM
+		SET PAYED = 'Y'
+		WHERE ID = #id#
+	</update>
+	
+	
+	<update id="payFailed" parameterClass="com.anoki.jaxb.Team">
+		UPDATE TEAM
+		SET PAYED = 'N', POSTPONED  = POSTPONED + 1
+		WHERE ID = #id#
+	</update>
+	
 </sqlMap>

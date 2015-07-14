@@ -2,11 +2,10 @@ package com.anoki.singleton;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.Charset;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.anoki.jaxb.Prayer;
-import com.anoki.jaxb.Search;
 import com.ibatis.common.resources.Resources;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.ibatis.sqlmap.client.SqlMapClientBuilder;
@@ -20,6 +19,8 @@ public class Ibatis {
 		if(smc == null){
 			Reader rd;
 			try {
+				Charset charset = Charset.forName("UTF-8"); // 인코딩 설정
+				Resources.setCharset(charset);
 				rd = Resources.getResourceAsReader("SqlMapConfig.xml");
 				smc = SqlMapClientBuilder.buildSqlMapClient(rd);
 			} catch (IOException e) {
@@ -51,7 +52,7 @@ public class Ibatis {
 		smc.update(id,arg);
 	}
 
-	public static List list(String id,Object arg) throws SQLException{
+	public static List<?> list(String id,Object arg) throws SQLException{
 		return smc.queryForList(id, arg);
 	}
 

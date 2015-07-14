@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.anoki.jaxb.Dalant;
 import com.anoki.jaxb.Prayer;
 import com.anoki.jaxb.Response;
 import com.anoki.jaxb.Search;
@@ -178,4 +179,54 @@ public class UserResource {
 		
 		return key+"";
 	}
+	
+	@POST
+	@Path("charge")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)	
+	public Response charge(User user){
+		
+		user.id = Keys.getUserId(user.apiKey);
+		
+		Response r = new Response();
+		
+
+		try {
+			Ibatis.insert("charge",user);
+			Ibatis.update("addDalant",user);
+			
+			r.result="0";
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return r;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@POST
+	@Path("dalant")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)	
+	public List<Dalant> dalant(Search search){
+		
+		search.id = Keys.getUserId(search.apiKey);
+		
+		
+		List <Dalant> r = new ArrayList <Dalant>();
+		
+		try {
+			
+			r = (List <Dalant>)Ibatis.list("dalant", search);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return r;
+	}
+	
 }

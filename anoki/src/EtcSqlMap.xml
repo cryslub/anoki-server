@@ -129,5 +129,26 @@
 	</update>
 	
 	
+	<insert id="charge" parameterClass="com.anoki.jaxb.User">
+		INSERT INTO DALANT(USER,AMOUNT,TEXT) VALUES
+		(#id#,#dalant#,CONCAT(#dalant#,' 달란트'))	
+	</insert>
 	
+	<insert id="spend" parameterClass="com.anoki.jaxb.Prayer">
+		INSERT INTO DALANT(USER,AMOUNT,TEXT,TYPE) VALUES
+		(#userId#,#spend#,CONCAT('친구요청 ',(#spend#/10),'명 초과'),'U')		
+	</insert>
+	
+	<insert id="spendOnTeam" parameterClass="com.anoki.jaxb.Team">
+		INSERT INTO DALANT(USER,AMOUNT,TEXT,TYPE) VALUES
+		(#leaderId#,#dalant#,'그룹 월사용료','U')		
+	</insert>
+	
+	<select id="getScheduler" resultClass="int">
+		SELECT ID FROM SCHEDULER 
+		WHERE DATE(NOW()) = DATE(TIME)
+	</select>
+	<insert id="insertScheduler">
+		INSERT INTO SCHEDULER() VALUES ()
+	</insert>
 </sqlMap>

@@ -26,4 +26,6 @@ public class Prayer {
 	public String responseCount;
 	public List<Reply> reply; //미디어 list
 	public int team;
+	public int dalant;
+	public int spend;
 }
