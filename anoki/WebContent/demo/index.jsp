@@ -181,7 +181,7 @@ function sendJson(id){
 	<input type="button" value="메시지 조회" onClick="send('#message')"/>
 </form>
 
-<form id="friend" enctype='application/json' action="/anoki/rest/etc/friend" method="post">
+<form id="friend" enctype='application/json' action="/anoki/rest/friend/list" method="post">
 	apiKey : <input name="apiKey" value="549918230"/>
 	<input type="button" value="친구 조회" onClick="send('#friend')"/>
 </form>
@@ -323,6 +323,7 @@ function sendJson(id){
 	등록 권한 (리더/청지기/일반)registerAuth(3/2/1) : <input name="registerAuth" value="3"/>
 	초대 권한 (리더/청지기/일반)inviteAuth(3/2/1) : <input name="inviteAuth" value="3"/>
 	강퇴 권한 (리더/청지기/일반)leaveAuth(3/2/1) : <input name="leaveAuth" value="3"/>
+	월 결제 달란트 dalant  <input name="dalant" value="2000"/>
 	<input type="button" value="그룹 수정" onClick="send('#updateTeam')"/>
 </form>
 
@@ -343,7 +344,7 @@ function sendJson(id){
 	<input type="button" value="그룹원 상태 수정" onClick="send('#updateMemberState')"/>
 </form>
 
-<form id="updateFriendState" enctype='application/json' action="/anoki/rest/etc/friend" method="put">
+<form id="updateFriendState" enctype='application/json' action="/anoki/rest/friend" method="put">
 	apiKey : <input name="apiKey" value="549918230"/>
 
 	friend : <input name="friend" value="3"/>	
@@ -359,17 +360,17 @@ function sendJson(id){
 	<input type="button" value="친구추가" onClick="sendJson('#addFriend')"/>
 </form>
 
-<form id="charge" enctype='application/json' action="/anoki/rest/user/charge" method="post">
-	apiKey : <input name="apiKey" value="549918230"/>
-	dalant : <input name="dalant" value="1000"/>	
-	<input type="button" value="충전" onClick="send('#charge')"/>
-</form>
+<!-- <form id="charge" enctype='application/json' action="/anoki/rest/user/charge" method="post"> -->
+<!-- 	apiKey : <input name="apiKey" value="549918230"/> -->
+<!-- 	dalant : <input name="dalant" value="1000"/>	 -->
+<!-- 	<input type="button" value="충전" onClick="send('#charge')"/> -->
+<!-- </form> -->
 
 
-<form id="dalant" enctype='application/json' action="/anoki/rest/user/dalant" method="post">
-	apiKey : <input name="apiKey" value="549918230"/>
-	<input type="button" value="달란트 내역조회" onClick="send('#dalant')"/>
-</form>
+<!-- <form id="dalant" enctype='application/json' action="/anoki/rest/user/dalant" method="post"> -->
+<!-- 	apiKey : <input name="apiKey" value="549918230"/> -->
+<!-- 	<input type="button" value="달란트 내역조회" onClick="send('#dalant')"/> -->
+<!-- </form> -->
 
 
 <form id="notice" enctype='application/json' action="/anoki/rest/etc/notice" method="post">

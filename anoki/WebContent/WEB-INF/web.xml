@@ -24,10 +24,10 @@
 	</servlet-mapping>
 
 
-	 <listener>
-	    <listener-class>
-	            com.anoki.scheduler.Scheduler
-	        </listener-class>
-	  </listener>
+<!-- 	 <listener> -->
+<!-- 	    <listener-class> -->
+<!-- 	            com.anoki.scheduler.Scheduler -->
+<!-- 	        </listener-class> -->
+<!-- 	  </listener> -->
 
 </web-app>

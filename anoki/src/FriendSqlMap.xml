@@ -35,6 +35,22 @@
 		FROM FRIEND 
 		LEFT OUTER JOIN USER ON FRIEND.FRIEND = USER.ID 
 		WHERE FRIEND.USER = #id#
+		<isNotEmpty property="searchKey">
+		AND FRIEND.STATE = #searchKey#
+		</isNotEmpty>
+		UNION
+		SELECT
+			USER.PICTURE,
+			USER.NAME,
+			FRIEND.USER AS FRIEND, 
+			FRIEND.STATE	
+		FROM FRIEND 
+		LEFT OUTER JOIN USER ON FRIEND.USER = USER.ID 
+		WHERE FRIEND.FRIEND = #id#
+		<isNotEmpty property="searchKey">
+		AND FRIEND.STATE = #searchKey#
+		</isNotEmpty>
+		
 	</select>
 	
 	
