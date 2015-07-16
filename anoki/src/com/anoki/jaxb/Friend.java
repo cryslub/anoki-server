@@ -8,5 +8,5 @@ public class Friend {
 	public String picture;
 	public String name;
 	public String state;
-
+	public String phone;
 }
