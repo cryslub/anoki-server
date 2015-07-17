@@ -12,6 +12,18 @@
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 	</insert>
+
+
+	<insert id="insertTempUser" parameterClass="string">
+
+		INSERT INTO USER (PHONE) VALUES
+		(#phone#)
+
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
 	
 	<update id="updateUserDevice" parameterClass="com.anoki.jaxb.Phone">
 		UPDATE USER SET DEVICE = #device#
@@ -54,8 +66,8 @@
 	</select>
 	
 	
-	<select id="getIdWithPhone" parameterClass="com.anoki.jaxb.Phone" resultClass="int">
-		SELECT ID FROM USER WHERE COUNTRY=#country# AND PHONE=#number#
+	<select id="getIdWithPhone" parameterClass="string" resultClass="int">
+		SELECT ID FROM USER WHERE PHONE=#number#
 	</select>
 	
 	<select id="getAccountWithPhone" parameterClass="com.anoki.jaxb.Phone" resultClass="string">

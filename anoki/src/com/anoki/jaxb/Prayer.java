@@ -21,9 +21,9 @@ public class Prayer {
 	public String lastPrayed;//마지막 기도시간
 	public int userId;//사용자 id
 	public List<Integer> friends;
-	public List<Phone> phone;	
+	public List<String> phone;	
 	public String scrapd;
-	public String responseCount;
+	public int responseCount;
 	public List<Reply> reply; //미디어 list
 	public int team;
 	public int dalant;
