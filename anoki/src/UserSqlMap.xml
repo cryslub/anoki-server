@@ -82,6 +82,7 @@
 	<select id="getUser" parameterClass="com.anoki.jaxb.User"
 		resultClass="com.anoki.jaxb.User">
 		SELECT 
+			ID,
 			PICTURE,
 			NAME,
 			TEXT,

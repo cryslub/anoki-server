@@ -8,14 +8,14 @@
   <transactionManager type="JDBC">
     <dataSource type="SIMPLE">
       <property name="JDBC.Driver"        value="com.mysql.jdbc.Driver"/>
-      <property name="JDBC.ConnectionURL" value="jdbc:mysql://anoki.co.kr:3306/perseverance220?useUnicode=true&amp;characterEncoding=UTF8&amp;"/>
+      <property name="JDBC.ConnectionURL" value="jdbc:mysql://localhost:3306/perseverance220?useUnicode=true&amp;characterEncoding=UTF8&amp;"/>
       <property name="JDBC.Username"      value="perseverance220"/>
       <property name="JDBC.Password"      value="goodwill1004"/>
       
       <!-- 특정 시간마다 validationQuery를 실행 셋팅 시작 -->
         <property name="validationQuery" value="select 1"/>
         <property name="testWhileIdle" value="true"/>
-        <property name="timeBetweenEvictionRunsMillis" value="7200000"/>
+        <property name="timeBetweenEvictionRunsMillis" value="3600000"/>
         <!-- 특정 시간마다 validationQuery를 실행 셋팅 끝 -->
         
     </dataSource>

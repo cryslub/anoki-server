@@ -34,7 +34,7 @@ public class UserResource {
 		
 		try {
 			
-			Integer id  =Ibatis.insert("checkUser",user);
+			Integer id  =(Integer) Ibatis.object("checkUser",user);
 			if(id == null){
 				r.id = Ibatis.insert("insertUser",user);
 				Ibatis.update("bindPhone",user);

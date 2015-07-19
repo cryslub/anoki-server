@@ -147,7 +147,7 @@ function sendJson(id){
 
 
 <form id="prayerJson" enctype='application/json' action="/anoki/rest/prayer" method="post">
-	<textarea>{"apiKey":"549918230","text":"기도제목","back":"기도배경","team":"2","pub":"Y","friends":[4,5,],"phone":[{"number":"0103224555","country":"82"},{"number":"0102223455","country":"82"}]}
+	<textarea>{"apiKey":"549918230","text":"기도제목","back":"기도배경","team":"2","pub":"Y","friends":[4,5,],"phone":["0103224555""0102223455"]}
 	</textarea>
 	<input type="button" value="기도작성" onClick="sendJson('#prayerJson')"/>
 </form>
@@ -360,17 +360,17 @@ function sendJson(id){
 	<input type="button" value="친구추가" onClick="sendJson('#addFriend')"/>
 </form>
 
-<!-- <form id="charge" enctype='application/json' action="/anoki/rest/user/charge" method="post"> -->
-<!-- 	apiKey : <input name="apiKey" value="549918230"/> -->
-<!-- 	dalant : <input name="dalant" value="1000"/>	 -->
-<!-- 	<input type="button" value="충전" onClick="send('#charge')"/> -->
-<!-- </form> -->
+<form id="charge" enctype='application/json' action="/anoki/rest/user/charge" method="post">
+	apiKey : <input name="apiKey" value="549918230"/>
+	dalant : <input name="dalant" value="1000"/>	
+	<input type="button" value="충전" onClick="send('#charge')"/>
+</form>
 
 
-<!-- <form id="dalant" enctype='application/json' action="/anoki/rest/user/dalant" method="post"> -->
-<!-- 	apiKey : <input name="apiKey" value="549918230"/> -->
-<!-- 	<input type="button" value="달란트 내역조회" onClick="send('#dalant')"/> -->
-<!-- </form> -->
+<form id="dalant" enctype='application/json' action="/anoki/rest/user/dalant" method="post">
+	apiKey : <input name="apiKey" value="549918230"/>
+	<input type="button" value="달란트 내역조회" onClick="send('#dalant')"/>
+</form>
 
 
 <form id="notice" enctype='application/json' action="/anoki/rest/etc/notice" method="post">
