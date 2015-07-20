@@ -107,11 +107,15 @@ function sendJson(id){
 </form>
 
 <form id="pass" enctype='application/json' action="/anoki/rest/auth/pass" method="post">
-	계정 account : <input name="account" value="someone@somewhere.com"/>
-	암호 pass : <input name="pass" value="dkfeweql@3!"/>
+	apiKey : <input name="apiKey" value="549918230"/>
+	암호 pass : <input name="searchKey" value="dkfeweql@3!"/>
 	<input type="button" value="암호확인" onClick="send('#pass')"/>
 </form>
 
+<form id="restore" enctype='application/json' action="/anoki/rest/auth/restore" method="post">
+	apiKey : <input name="apiKey" value="549918230"/>
+	<input type="button" value="비밀번호 재설정" onClick="send('#restore')"/>
+</form>
 
 
 <form id="updateUser" enctype='application/json' action="/anoki/rest/user" method="put">

@@ -334,5 +334,25 @@ public class PrayerResource {
 		return r;
 	}
 	
+	@POST
+	@Path("complete")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response complete(Prayer prayer) {
+		Response r = new Response();
+				
+		try {
+			Ibatis.insert("complete", prayer);
+
+			r.result = "0";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return r;
+	}
+	
 	
 }

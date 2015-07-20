@@ -28,4 +28,5 @@ public class Prayer {
 	public int team;
 	public int dalant;
 	public int spend;
+	public String completed;
 }

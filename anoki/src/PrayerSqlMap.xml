@@ -218,5 +218,11 @@
 		VALUES (#prayer#,#userId#,#text#,#pub#,#type#,#picture#)
 	</insert>
 	
+	<update id="complete" parameterClass="com.anoki.jaxb.Prayer">
+		UPDATE PRAYER
+		SET COMPLETED = 'Y'
+		WHERE ID = #id#
+	</update>
+	
 </sqlMap>
 
