@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.anoki.jaxb.Dalant;
+import com.anoki.jaxb.Notice;
 import com.anoki.jaxb.Prayer;
 import com.anoki.jaxb.Response;
 import com.anoki.jaxb.Search;
@@ -228,5 +229,29 @@ public class UserResource {
 		
 		return r;
 	}
+	
+
+	@POST
+	@Path("check")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response check(User user) {
+
+		
+		Response result = new Response();
+		
+		try {
+			Integer id  =(Integer) Ibatis.object("checkUser",user);
+			if(id == null){
+				result.result = "0";
+			}
+		} catch (SQLException e) {
+			
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}	
 	
 }
