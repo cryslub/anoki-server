@@ -147,7 +147,7 @@
 	
 	
 	
-	<select id="scrapd" parameterClass="com.anoki.jaxb.Search"
+	<select id="scraped" parameterClass="com.anoki.jaxb.Search"
 		resultClass="com.anoki.jaxb.Prayer">
 		SELECT
 		USER.PICTURE AS USERPICTURE,
