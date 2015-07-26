@@ -71,11 +71,15 @@
 	</select>
 	
 	<select id="getAccountWithPhone" parameterClass="com.anoki.jaxb.Phone" resultClass="string">
-		SELECT ACCOUNT FROM USER WHERE COUNTRY=#country# AND PHONE=#number#
+		SELECT ACCOUNT FROM USER WHERE COUNTRY=#country# AND PHONE=#number# LIMIT 1
 	</select>
 	
 	<select id="getUserId" parameterClass="com.anoki.jaxb.User" resultClass="int">
 		SELECT ID FROM USER WHERE ACCOUNT=#account# AND PASS=#pass#
+	</select>
+	
+	<select id="confirmPass" parameterClass="com.anoki.jaxb.Search" resultClass="int">
+		SELECT ID FROM USER WHERE ID=#id# AND PASS=#searchKey#
 	</select>
 	
 	
@@ -100,7 +104,7 @@
 		SELECT
 		USER.PICTURE AS USERPICTURE,
 		USER.NAME AS USERNAME,
-		PRAYER.TIME AS TIME,
+		CONCAT(MONTH(PRAYER.TIME),'월 ',DAY(PRAYER.TIME),'일') AS TIME,
 		PRAYER.BACK AS BACK,
 		PRAYER.TEXT AS TEXT,
 		PRAYER.ID AS ID,
