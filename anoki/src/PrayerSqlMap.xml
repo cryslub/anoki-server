@@ -199,6 +199,7 @@
 		WHERE
 			REQUEST.USER = #id#
 		ORDER BY PRAYER.TIME DESC
+
 	</select>
 	
 	

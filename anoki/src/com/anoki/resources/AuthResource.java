@@ -1,19 +1,23 @@
 package com.anoki.resources;
 
 import java.math.BigInteger;
-import java.net.PasswordAuthentication;
 import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-
-import com.anoki.jaxb.Message;
 import com.anoki.jaxb.Phone;
 import com.anoki.jaxb.Response;
 import com.anoki.jaxb.Search;

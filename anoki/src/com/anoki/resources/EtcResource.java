@@ -109,7 +109,6 @@ public class EtcResource {
 		return result;
 	}
 	
-
 	
 }
 

@@ -272,16 +272,16 @@ public class PrayerResource {
 
 	@SuppressWarnings("unchecked")
 	@POST
-	@Path("scrapd")
+	@Path("scraped")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Prayer> scrapd(Search search) {
+	public List<Prayer> scraped(Search search) {
 
 		search.id = Keys.getUserId(search.apiKey);
 		
 		List<Prayer> result = new ArrayList<Prayer>();
 		try {
-			result = (List<Prayer>) Ibatis.list("scrapd",search);
+			result = (List<Prayer>) Ibatis.list("scraped",search);
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -323,6 +323,26 @@ public class PrayerResource {
 		
 		try {
 			Ibatis.insert("insertReply", reply);
+
+			r.result = "0";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return r;
+	}
+	
+	@POST
+	@Path("complete")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response complete(Prayer prayer) {
+		Response r = new Response();
+				
+		try {
+			Ibatis.insert("complete", prayer);
 
 			r.result = "0";
 		} catch (SQLException e) {
