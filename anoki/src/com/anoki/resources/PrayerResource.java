@@ -342,7 +342,7 @@ public class PrayerResource {
 		Response r = new Response();
 				
 		try {
-			Ibatis.insert("complete", prayer);
+			Ibatis.update("complete", prayer);
 
 			r.result = "0";
 		} catch (SQLException e) {

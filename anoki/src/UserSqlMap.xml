@@ -82,9 +82,6 @@
 		SELECT ID FROM USER WHERE ID=#id# AND PASS=#searchKey#
 	</select>
 	
-	<select id="confirmPass" parameterClass="com.anoki.jaxb.Search" resultClass="int">
-		SELECT ID FROM USER WHERE ID=#id# AND PASS=#searchKey#
-	</select>
 	
 	
 	<select id="getUser" parameterClass="com.anoki.jaxb.User"
