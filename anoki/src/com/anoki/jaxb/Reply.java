@@ -1,5 +1,8 @@
 package com.anoki.jaxb;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Reply {
 	
 	public String apiKey;
