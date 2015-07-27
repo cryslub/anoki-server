@@ -128,7 +128,7 @@
 		</isEqual>
 		ORDER
 		BY PRAYER.TIME DESC
-		LIMIT #page#,#size#
+
 	</select>
 	
 	
