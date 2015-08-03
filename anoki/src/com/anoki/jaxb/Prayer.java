@@ -29,4 +29,5 @@ public class Prayer {
 	public int dalant;
 	public int spend;
 	public String completed;
+	public String raw_time;
 }
