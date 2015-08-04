@@ -64,19 +64,11 @@
 		OR (FRIEND= #user# AND USER = #friend#)
 	</update>
 	
-	<insert id="addFriend" parameterClass="com.anoki.jaxb.Invite">
+	<insert id="addFriend" parameterClass="com.anoki.jaxb.Friend">
 		INSERT INTO FRIEND(
 			USER,FRIEND
-		) 
-		SELECT
-			#id#, 
-			ID 
-		FROM USER 
-		WHERE CONCAT(COUNTRY,PHONE) IN
-		<iterate  property="phone" open="("
-			conjunction="," close=")">
-			CONCAT(#phone[].country#, #phone[].number#)
-		</iterate>
+		) VALUES (#user#,#friend#)
+
 	</insert>
 	
 </sqlMap>
