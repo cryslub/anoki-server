@@ -71,7 +71,7 @@
 			USER.NAME,
 			USER.PICTURE,
 			REPLY.TEXT,
-			REPLY.TIME,
+			REPLACE( REPLACE( CONCAT( MONTH( REPLY.TIME ) ,  '월 ', DAY( REPLY.TIME ) ,  '일 ', DATE_FORMAT( REPLY.TIME,  '%p %h:%i' ) ) ,  'AM',  '오전' ) ,  'PM',  '오후' ) AS TIME,			
 			REPLY.TYPE,
 			REPLY.PUBLIC AS PUB,
 			USER.ID AS USERID
