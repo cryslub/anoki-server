@@ -30,4 +30,5 @@ public class Prayer {
 	public int spend;
 	public String completed;
 	public String raw_time;
+	public String long_time;
 }
