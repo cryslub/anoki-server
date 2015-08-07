@@ -18,7 +18,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.anoki.jaxb.Friend;
-import com.anoki.jaxb.Phone;
+import com.anoki.jaxb.Media;
 import com.anoki.jaxb.Prayer;
 import com.anoki.jaxb.Reply;
 import com.anoki.jaxb.Response;
@@ -48,7 +48,7 @@ public class PrayerResource {
 		try {
 			result = (List<Prayer>) Ibatis.list("recent",search);
 			for(Prayer prayer : result){
-				prayer.media = (List<String>) Ibatis.list("mediaList",search);
+				prayer.media = (List<Media>) Ibatis.list("mediaList",prayer);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -196,6 +196,32 @@ public class PrayerResource {
 
 	}
 	
+	
+	@POST
+	@Path("upload/video")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+
+	public String uploadVideo(
+			@FormDataParam("uploaded") InputStream fileInputStream,
+			@FormDataParam("file") FormDataContentDisposition contentDispositionHeader,
+			@FormDataParam("id") String id) {
+
+
+		String imagePath = context.getRealPath("")+"/images/video/";
+		
+		
+		String filePath = imagePath	+ id;
+
+		// save the file to the server
+		saveFile(fileInputStream, filePath);
+
+		
+		return id;
+
+	}
+
+
+	
 	@POST
 	@Path("scrap")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -256,7 +282,7 @@ public class PrayerResource {
 		
 		try {
 			r = (Prayer) Ibatis.object("getPrayer", search);
-			r.media = (List<String>) Ibatis.list("mediaList",search);
+			r.media = (List<Media>) Ibatis.list("mediaList",r);
 			r.reply = (List<Reply>) Ibatis.list("replyList",search);
 			
 		} catch (SQLException e) {

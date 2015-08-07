@@ -5,8 +5,8 @@
 <sqlMap namespace="user">
 	<insert id="insertUser" parameterClass="com.anoki.jaxb.User">
 
-		INSERT INTO USER (ACCOUNT,PASS,COUNTRY,PHONE) VALUES
-		(#account#,#pass#,#country#,#phone#)
+		INSERT INTO USER (ACCOUNT,PASS,COUNTRY,PHONE,NAME,PICTURE) VALUES
+		(#account#,#pass#,#country#,#phone#,#name#,#picture#)
 
 		<selectKey keyProperty="id" resultClass="int">
 			SELECT LAST_INSERT_ID()
@@ -117,7 +117,8 @@
 		) AS REPLYCOUNT,
 		(SELECT MAX(TIME) FROM PRAY WHERE PRAYER = PRAYER.ID AND USER=#id#) AS LASTPRAYED,
 		SCRAP.ID AS SCRAPD,
-		PRAYER.TIME AS RAW_TIME
+		PRAYER.TIME AS RAW_TIME,
+		REPLACE( REPLACE( CONCAT( MONTH( PRAYER.TIME ) ,  '월 ', DAY( PRAYER.TIME ) ,  '일 ', DATE_FORMAT( PRAYER.TIME,  '%p %h:%i' ) ) ,  'AM',  '오전' ) ,  'PM',  '오후' ) AS LONG_TIME		
 		FROM PRAYER
 		LEFT OUTER JOIN USER ON PRAYER.USER = USER.ID
 		LEFT OUTER JOIN SCRAP ON PRAYER.ID = SCRAP.PRAYER AND SCRAP.USER=#id#

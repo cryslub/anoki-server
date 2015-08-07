@@ -19,6 +19,7 @@
 			WHERE PRAYER = PRAYER.ID
 			AND (PUBLIC = 'Y' OR USER = #id# OR USER.ID = #id#) 
 		) AS REPLYCOUNT,
+		(SELECT COUNT(*) FROM REPLY WHERE PRAYER = PRAYER.ID AND TYPE='R') AS RESPONSECOUNT,		
 		(SELECT MAX(TIME) FROM PRAY WHERE PRAYER = PRAYER.ID AND USER=#id#) AS LASTPRAYED,
 		SCRAP.ID AS SCRAPD
 		FROM PRAYER
@@ -58,10 +59,10 @@
 		PRAYER.ID = #searchId#
 	</select>
 	
-	<select id="mediaList" parameterClass="com.anoki.jaxb.Search"
-		resultClass="String">
-		SELECT PATH FROM MEDIA
-		WHERE PRAYER = #searchId#
+	<select id="mediaList" parameterClass="com.anoki.jaxb.Prayer"
+		resultClass="com.anoki.jaxb.Media">
+		SELECT ID,TYPE FROM MEDIA
+		WHERE PRAYER = #id#
 	</select>
 
 	
@@ -101,7 +102,7 @@
 		UPDATE MEDIA SET PRAYER = #id#
 		WHERE ID IN
 		<iterate  property="media" open="(" conjunction="," close=")">
-			#media[]#
+			#media[].id#
 		</iterate>
 	</update>
 
