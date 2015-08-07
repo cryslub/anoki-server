@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.anoki.jaxb.Friend;
 import com.anoki.jaxb.Invite;
+import com.anoki.jaxb.Phone;
 import com.anoki.jaxb.Response;
 import com.anoki.jaxb.Search;
 import com.anoki.singleton.Ibatis;
@@ -65,22 +66,42 @@ public class FriendResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response post(Invite invite) {
-		Response r = new Response();
+	public Invite post(Invite invite) {
 		
 		invite.id = Keys.getUserId(invite.apiKey);
 		
 		try {
-			Ibatis.insert("addFriend", invite);
+			
+			invite.friends = new ArrayList<Integer>();
+			
+			for(Phone phone : invite.phone){
+				
+				Integer id = (Integer)Ibatis.object("getIdWithPhone", phone.number);
+				
+				if(id!=null){
+					
+					Friend friend = new Friend();
+					friend.user = invite.id;
+					friend.friend = id;
+					
+					Integer friendId = (Integer) Ibatis.object("checkFriend",friend);
+					if(friendId == null){
+						Ibatis.insert("addFriend",friend);
+					}
+				}
+				
+				invite.friends.add(id);
+			}
+			
+//			Ibatis.insert("addFriend", invite);
 
-			r.result = "0";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		
-		return r;
+		return invite;
 	}
 	
 }
