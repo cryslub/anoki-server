@@ -3,8 +3,8 @@
 
 <%@page import="com.anoki.singleton.Ibatis"%>
 <%
-	String id = request.getParameter("id");
-	Ibatis.update("acceptFriendRequest",id);
+//	String id = request.getParameter("id");
+//	Ibatis.update("acceptFriendRequest",id);
 	//Ibatis.insert("insertFriendAlarm",id);
 
 %>

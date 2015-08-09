@@ -74,9 +74,9 @@ public class FriendResource {
 			
 			invite.friends = new ArrayList<Integer>();
 			
-			for(Phone phone : invite.phone){
+			for(Friend phone : invite.phone){
 				
-				Integer id = (Integer)Ibatis.object("getIdWithPhone", phone.number);
+				Integer id = (Integer)Ibatis.object("getRealUserIdWithPhone", phone.phone);
 				
 				if(id!=null){
 					

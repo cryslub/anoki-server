@@ -37,7 +37,17 @@ public class UserResource {
 			
 			Integer id  =(Integer) Ibatis.object("checkUser",user);
 			if(id == null){
-				r.id = Ibatis.insert("insertUser",user);
+				
+				r.id  =(Integer) Ibatis.object("getIdWithPhone",user.phone);
+				
+				if(id == null){
+					r.id = Ibatis.insert("insertUser",user);
+				}else{
+					user.id = r.id;
+					Ibatis.update("updateUser",user);					
+				}
+				
+				
 				Ibatis.update("bindPhone",user);
 
 				r.result = "0";		

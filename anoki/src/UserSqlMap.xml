@@ -19,7 +19,7 @@
 		INSERT INTO USER (PHONE) VALUES
 		(#phone#)
 
-		<selectKey keyProperty="id" resultClass="int">
+		<selectKey  resultClass="int">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 	</insert>
@@ -33,6 +33,9 @@
 	<update id="updateUser" parameterClass="com.anoki.jaxb.User">
 		UPDATE USER SET NAME = #name#
 		,TEXT = #text#
+		<isNotEmpty property="account">		
+		,ACCOUNT = #account#
+		</isNotEmpty>		
 		<isNotEmpty property="picture">		
 		,PICTURE = #picture#
 		</isNotEmpty>
@@ -69,6 +72,13 @@
 	<select id="getIdWithPhone" parameterClass="string" resultClass="int">
 		SELECT ID FROM USER WHERE PHONE=#number#
 	</select>
+
+
+	<select id="getRealUserIdWithPhone" parameterClass="string" resultClass="int">
+		SELECT ID FROM USER WHERE PHONE=#number#
+		AND ACCOUNT != NULL
+	</select>
+
 	
 	<select id="getAccountWithPhone" parameterClass="com.anoki.jaxb.Phone" resultClass="string">
 		SELECT ACCOUNT FROM USER WHERE COUNTRY=#country# AND PHONE=#number# LIMIT 1

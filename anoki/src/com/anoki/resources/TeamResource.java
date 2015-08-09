@@ -11,13 +11,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.anoki.jaxb.Friend;
+import com.anoki.jaxb.Invite;
 import com.anoki.jaxb.Member;
 import com.anoki.jaxb.Phone;
 import com.anoki.jaxb.Prayer;
 import com.anoki.jaxb.Response;
 import com.anoki.jaxb.Search;
 import com.anoki.jaxb.Team;
-import com.anoki.jaxb.Invite;
 import com.anoki.jaxb.User;
 import com.anoki.singleton.Ibatis;
 import com.anoki.singleton.Keys;
@@ -132,7 +133,9 @@ public class TeamResource {
 			if(teamInvite.phone != null){
 				if(teamInvite.friends == null) teamInvite.friends = new ArrayList<Integer> ();
 				
-				for(Phone phone : teamInvite.phone){	
+				for(Friend friend : teamInvite.phone){	
+					Phone phone = new Phone();
+					phone.number = friend.phone;
 					int id = (Integer) Ibatis.smc.insert("insertUser",phone);
 					teamInvite.friends.add(id);
 				}

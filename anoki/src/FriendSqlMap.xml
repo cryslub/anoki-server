@@ -19,12 +19,6 @@
 	
 	
 	
-	<insert id="insertFriend" parameterClass="com.anoki.jaxb.Friend">
-		INSERT INTO FRIEND(
-			USER,FRIEND
-		) VALUES (#user#,#friend#)
-	</insert>
-
 	<select id="friend" parameterClass="com.anoki.jaxb.Search"
 		resultClass="com.anoki.jaxb.Friend">
 		SELECT * FROM(
@@ -35,8 +29,9 @@
 				FRIEND.STATE,
 				USER.PHONE
 			FROM FRIEND 
-			LEFT OUTER JOIN USER ON FRIEND.FRIEND = USER.ID 
+			JOIN USER ON FRIEND.FRIEND = USER.ID 
 			WHERE FRIEND.USER = #id#
+			AND USER.ACCOUNT != NULL
 			<isNotEmpty property="searchKey">
 			AND FRIEND.STATE = #searchKey#
 			</isNotEmpty>
@@ -48,8 +43,9 @@
 				FRIEND.STATE,	
 				USER.PHONE
 			FROM FRIEND 
-			LEFT OUTER JOIN USER ON FRIEND.USER = USER.ID 
+			JOIN USER ON FRIEND.USER = USER.ID 
 			WHERE FRIEND.FRIEND = #id#
+			AND USER.ACCOUNT != NULL
 			<isNotEmpty property="searchKey">
 			AND FRIEND.STATE = #searchKey#
 			</isNotEmpty>

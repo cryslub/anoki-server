@@ -8,6 +8,6 @@ public class Invite {
 	public int id;
 	public int team;
 	public List<Integer> friends;
-	public List<Phone> phone;	
+	public List<Friend> phone;	
 	
 }

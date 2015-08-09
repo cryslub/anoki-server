@@ -26,6 +26,7 @@ import com.anoki.jaxb.Search;
 import com.anoki.jaxb.User;
 import com.anoki.singleton.Ibatis;
 import com.anoki.singleton.Keys;
+import com.anoki.singleton.Sms;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
@@ -74,6 +75,11 @@ public class PrayerResource {
 			if(prayer.phone != null){
 				if(prayer.friends == null) prayer.friends = new ArrayList<Integer> ();
 				
+				
+				User user = new User();
+				user.id = prayer.userId;
+				user = (User)Ibatis.object("getUser",user);
+				
 				for(String phone : prayer.phone){	
 					Integer id = (Integer) Ibatis.object("getIdWithPhone", phone);
 					
@@ -90,8 +96,10 @@ public class PrayerResource {
 					Object obj= Ibatis.object("checkFriend", friend);
 					
 					if(obj == null){					
-						Ibatis.insert("insertFriend", friend);
+						Ibatis.insert("addFriend", friend);
 					}
+					
+					sendInvite(user.name, phone);
 				}
 			}
 
@@ -133,6 +141,10 @@ public class PrayerResource {
 		
 	}
 	
+	
+	private void sendInvite(String name, String number){
+		Sms.sendSms("lms",number,name + "님이 기도어플 아노키로 초대하셨습니다. 아래를 누르시면 " + name + "님과 친구가 됩니다. \n\n http://anoki.co.kr/anoki/invite.jsp");
+	}
 	
 	@POST
 	@Path("upload")
