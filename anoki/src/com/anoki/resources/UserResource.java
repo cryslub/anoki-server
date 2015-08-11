@@ -40,7 +40,7 @@ public class UserResource {
 				
 				r.id  =(Integer) Ibatis.object("getIdWithPhone",user.phone);
 				
-				if(id == null){
+				if(r.id == null){
 					r.id = Ibatis.insert("insertUser",user);
 				}else{
 					user.id = r.id;
@@ -161,9 +161,11 @@ public class UserResource {
 		try {
 			Integer id = (Integer) Ibatis.object("getUserId",user);
 			
-			r.id = id;
-			r.apiKey = logIn(id);
-			r.result="0";
+			if(id != null){
+				r.id = id;
+				r.apiKey = logIn(id);
+				r.result="0";
+			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

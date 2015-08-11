@@ -71,13 +71,15 @@
 	<select id="replyList" parameterClass="com.anoki.jaxb.Search"
 		resultClass="com.anoki.jaxb.Reply">
 		SELECT 
+			REPLY.ID,
 			USER.NAME,
-			USER.PICTURE,
+			USER.PICTURE AS USERPICTURE,
 			REPLY.TEXT,
 			REPLACE( REPLACE( CONCAT( MONTH( REPLY.TIME ) ,  '월 ', DAY( REPLY.TIME ) ,  '일 ', DATE_FORMAT( REPLY.TIME,  '%p %h:%i' ) ) ,  'AM',  '오전' ) ,  'PM',  '오후' ) AS TIME,			
 			REPLY.TYPE,
 			REPLY.PUBLIC AS PUB,
-			USER.ID AS USERID
+			USER.ID AS USERID,
+			REPLY.PICTURE
 		FROM REPLY
 		LEFT OUTER JOIN USER ON REPLY.USER = USER.ID
 		LEFT OUTER JOIN PRAYER ON REPLY.PRAYER = PRAYER.ID
@@ -91,8 +93,11 @@
 
 
 	<insert id="insertPrayer" parameterClass="com.anoki.jaxb.Prayer">
-		INSERT INTO PRAYER (USER,BACK,TEXT,PUBLIC,TEAM) VALUES
-		(#userId#,#back#,#text#,#pub#,#team#)
+		INSERT INTO PRAYER (USER,BACK,TEXT,PUBLIC,TEAM,IDX) 
+		SELECT 
+			#userId#,#back#,#text#,#pub#,#team#
+			,IFNULL(MAX(IDX),0) +1 
+		FROM PRAYER WHERE USER = #userId#
 		
 		<selectKey keyProperty="id" resultClass="int">
 			SELECT LAST_INSERT_ID()
@@ -180,6 +185,7 @@
 	
 	
 	
+	
 	<select id="request" parameterClass="com.anoki.jaxb.Search"
 		resultClass="com.anoki.jaxb.Prayer">
 		SELECT
@@ -196,7 +202,8 @@
 				AND (PUBLIC ='Y' OR USER = #id#)
 			) AS REPLYCOUNT,
 			(SELECT MAX(TIME) FROM PRAY WHERE PRAYER = PRAYER.ID AND USER=#id#) AS LASTPRAYED,
-			SCRAP.ID AS SCRAPD
+			SCRAP.ID AS SCRAPD,
+			REQUEST.ID AS REQUESTID
 		FROM REQUEST
 			JOIN PRAYER ON PRAYER.ID = REQUEST.PRAYER
 			JOIN USER ON PRAYER.USER = USER.ID
@@ -207,6 +214,18 @@
 
 	</select>
 	
+	<delete id="deleteOldRequests">
+		<![CDATA[
+		DELETE FROM REQUEST 
+		WHERE PRAYER IN 
+		(SELECT ID FROM PRAYER WHERE TIME < SUBDATE(NOW(),2))	
+		]]>
+	</delete>
+	
+	<delete id="deleteRequest" parameterClass="com.anoki.jaxb.Prayer">
+		DELETE FROM REQUEST
+		WHERE ID = #requestId#
+	</delete>
 	
 	<insert id="insertReply" parameterClass="com.anoki.jaxb.Reply">
 		INSERT INTO REPLY(
@@ -223,6 +242,12 @@
 	<update id="complete" parameterClass="com.anoki.jaxb.Prayer">
 		UPDATE PRAYER
 		SET COMPLETED = 'Y'
+		WHERE ID = #id#
+	</update>
+	
+	<update id="updatePrayer" parameterClass="com.anoki.jaxb.Prayer">
+		UPDATE PRAYER
+		SET IDX = #idx#
 		WHERE ID = #id#
 	</update>
 	

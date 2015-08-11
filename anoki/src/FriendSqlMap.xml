@@ -31,7 +31,7 @@
 			FROM FRIEND 
 			JOIN USER ON FRIEND.FRIEND = USER.ID 
 			WHERE FRIEND.USER = #id#
-			AND USER.ACCOUNT != NULL
+			AND USER.ACCOUNT IS NOT NULL
 			<isNotEmpty property="searchKey">
 			AND FRIEND.STATE = #searchKey#
 			</isNotEmpty>
@@ -45,7 +45,7 @@
 			FROM FRIEND 
 			JOIN USER ON FRIEND.USER = USER.ID 
 			WHERE FRIEND.FRIEND = #id#
-			AND USER.ACCOUNT != NULL
+			AND USER.ACCOUNT IS NOT NULL
 			<isNotEmpty property="searchKey">
 			AND FRIEND.STATE = #searchKey#
 			</isNotEmpty>

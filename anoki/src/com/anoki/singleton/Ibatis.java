@@ -65,4 +65,9 @@ public class Ibatis {
 		// TODO Auto-generated method stub
 		return smc.queryForObject(id,arg);
 	}
+
+	public static void delete(String string) throws SQLException {
+		// TODO Auto-generated method stub
+		smc.delete(string);		
+	}
 }
