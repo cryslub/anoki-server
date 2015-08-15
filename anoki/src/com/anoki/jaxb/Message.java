@@ -9,5 +9,5 @@ public class Message {
 	public String sender; //전송자 이름
 	public int id; //id
 	public String back; //배경색
-	public String user;
+	public int user;
 }
