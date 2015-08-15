@@ -139,7 +139,7 @@
 			AND PRAYER.COMPLETED = 'Y'
 		</isEqual>
 		ORDER
-		BY PRAYER.TIME DESC
+		BY PRAYER.IDX DESC
 
 	</select>
 	

@@ -12,6 +12,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -58,6 +59,8 @@ public class PrayerResource {
 
 		return result;
 	}
+	
+	
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -141,6 +144,27 @@ public class PrayerResource {
 		
 	}
 	
+	
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response put(Prayer prayer){
+		
+		Response r = new Response();		
+		
+		try {
+			Ibatis.update("updatePrayer", prayer);
+
+			r.result = "0";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return r;
+		
+	}
 	
 	private void sendInvite(String name, String number){
 		Sms.sendSms("lms",number,name + "님이 기도어플 아노키로 초대하셨습니다. 아래를 누르시면 " + name + "님과 친구가 됩니다. \n\n http://anoki.co.kr/anoki/invite.jsp");
@@ -245,6 +269,10 @@ public class PrayerResource {
 		
 		try {
 			Ibatis.insert("insertScrap", prayer);
+			
+			if(!"null".equals(prayer.requestId) && prayer.requestId != null){
+				Ibatis.delete("deleteRequest",prayer);
+			}
 
 			r.result = "0";
 		} catch (SQLException e) {
@@ -340,6 +368,8 @@ public class PrayerResource {
 		
 		List<Prayer> result = new ArrayList<Prayer>();
 		try {
+			
+			Ibatis.delete("deleteOldRequests");
 			result = (List<Prayer>) Ibatis.list("request",search);
 
 		} catch (SQLException e) {
