@@ -24,30 +24,44 @@
 	
 	<select id="message" parameterClass="com.anoki.jaxb.Search"
 		resultClass="com.anoki.jaxb.Message">
-		SELECT
-			MESSAGE.TEXT,
-			USER.PICTURE,
-			REPLACE( REPLACE( CONCAT( MONTH( MESSAGE.TIME ) ,  '월 ', DAY( MESSAGE.TIME ) ,  '일 ', DATE_FORMAT( MESSAGE.TIME,  '%p %h:%i' ) ) ,  'AM',  '오전' ) ,  'PM',  '오후' ) AS TIME,			
-			USER.NAME AS SENDER,
-			MESSAGE.ID,
-			MESSAGE.BACK,
-			MESSAGE.USER AS USER
-		FROM MESSAGE 
-		LEFT OUTER JOIN USER ON MESSAGE.SENDER = USER.ID 
-		WHERE MESSAGE.USER = #id#
-		OR MESSAGE.SENDER = #id#
-		ORDER BY MESSAGE.TIME DESC
+		SELECT * FROM(
+			SELECT
+				MESSAGE.TEXT,
+				USER.PICTURE AS USERPICTURE,
+				REPLACE( REPLACE( CONCAT( MONTH( MESSAGE.TIME ) ,  '월 ', DAY( MESSAGE.TIME ) ,  '일 ', DATE_FORMAT( MESSAGE.TIME,  '%p %h:%i' ) ) ,  'AM',  '오전' ) ,  'PM',  '오후' ) AS TIME,			
+				USER.NAME AS SENDER,
+				MESSAGE.ID,
+				MESSAGE.BACK,
+				MESSAGE.USER AS USER
+			FROM MESSAGE 
+			LEFT OUTER JOIN USER ON MESSAGE.SENDER = USER.ID 
+			WHERE MESSAGE.USER = #id#
+			UNION
+			SELECT
+				MESSAGE.TEXT,
+				USER.PICTURE AS USERPICTURE,
+				REPLACE( REPLACE( CONCAT( MONTH( MESSAGE.TIME ) ,  '월 ', DAY( MESSAGE.TIME ) ,  '일 ', DATE_FORMAT( MESSAGE.TIME,  '%p %h:%i' ) ) ,  'AM',  '오전' ) ,  'PM',  '오후' ) AS TIME,			
+				USER.NAME AS SENDER,
+				MESSAGE.ID,
+				MESSAGE.BACK,
+				MESSAGE.USER AS USER				
+			FROM MESSAGE 
+			LEFT OUTER JOIN USER ON MESSAGE.USER = USER.ID 
+			WHERE MESSAGE.SENDER = #id#			
+		) X
+		ORDER BY X.TIME DESC
 		LIMIT #page#,#size#
 	</select>
 	
 	
-	<insert id="insertMessage">
+	<insert id="insertMessage" parameterClass="com.anoki.jaxb.Message">
 		INSERT INTO MESSAGE (
 			USER,
 			SENDER,
 			TEXT,
-			BACK
-		) VALUES (#user#,#id#,#text#,#back#)
+			BACK,
+			PICTURE
+		) VALUES (#user#,#id#,#text#,#back#,#picture#)
 		
 	</insert>
 	
@@ -92,7 +106,8 @@
 	<select id="notice"
 		resultClass="com.anoki.jaxb.Notice">
 		SELECT
-			*
+			TEXT,
+			REPLACE( REPLACE( CONCAT( MONTH( TIME ) ,  '월 ', DAY( TIME ) ,  '일 ', DATE_FORMAT( TIME,  '%p %h:%i' ) ) ,  'AM',  '오전' ) ,  'PM',  '오후' ) AS TIME
 		FROM NOTICE 
 		ORDER BY TIME DESC
 	</select>
@@ -130,6 +145,17 @@
 		UPDATE ADMIN SET PASS = #pass#
 	</update>
 	
+	<select id="dalant" parameterClass="com.anoki.jaxb.Search" 
+		resultClass="com.anoki.jaxb.Dalant">
+		SELECT 
+			AMOUNT,
+			TYPE,
+			TEXT,
+			REPLACE( REPLACE( CONCAT( MONTH( TIME ) ,  '월 ', DAY( TIME ) ,  '일 ', DATE_FORMAT( TIME,  '%p %h:%i' ) ) ,  'AM',  '오전' ) ,  'PM',  '오후' ) AS TIME			
+		 FROM DALANT
+		WHERE USER = #id#
+		ORDER BY TIME DESC
+	</select>
 	
 	<insert id="charge" parameterClass="com.anoki.jaxb.User">
 		INSERT INTO DALANT(USER,AMOUNT,TEXT) VALUES
