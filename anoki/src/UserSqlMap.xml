@@ -169,9 +169,5 @@
 		WHERE ID = #leaderId#
 	</update>
 	
-	<select id="dalant" parameterClass="com.anoki.jaxb.Search"
-		resultClass="com.anoki.jaxb.Dalant">
-		SELECT * FROM DALANT WHERE USER = #id#
-	</select>
 	
 </sqlMap>
