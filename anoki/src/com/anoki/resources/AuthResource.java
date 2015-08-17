@@ -159,15 +159,24 @@ public class AuthResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)	
 	public Response restore(Search search){
-		
-		search.id = Keys.getUserId(search.apiKey);
-		
+
+
 		Response r = new Response();
 		
+
 		try {
+
 			User user = new User();
-			user.id = search.id;
-			user = (User) Ibatis.object("getUser",user);
+
+			if(search.searchKey != null){
+				user.account = search.searchKey;
+			}else{
+				search.id = Keys.getUserId(search.apiKey);
+				user.id = search.id;
+				user = (User) Ibatis.object("getUser",user);
+
+			}
+		
 			SecureRandom random = new SecureRandom();
 			String newPass = new BigInteger(130, random).toString(32);			
 			user.pass = newPass.substring(15);
