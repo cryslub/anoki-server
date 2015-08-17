@@ -29,7 +29,7 @@
 
 	if("true".equals(session.getAttribute("logined"))){
 		
-		List<Notice> list = Ibatis.list("notice",null);
+		List<Notice> list = (List<Notice>) Ibatis.list("notice",null);
 %>
 
 <style>
