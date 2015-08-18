@@ -148,13 +148,15 @@
 	<select id="dalant" parameterClass="com.anoki.jaxb.Search" 
 		resultClass="com.anoki.jaxb.Dalant">
 		SELECT 
-			AMOUNT,
-			TYPE,
-			TEXT,
-			REPLACE( REPLACE( CONCAT( MONTH( TIME ) ,  '월 ', DAY( TIME ) ,  '일 ', DATE_FORMAT( TIME,  '%p %h:%i' ) ) ,  'AM',  '오전' ) ,  'PM',  '오후' ) AS TIME			
-		 FROM DALANT
-		WHERE USER = #id#
-		ORDER BY TIME DESC
+			X.AMOUNT,
+			X.TYPE,
+			X.TEXT,
+			REPLACE( REPLACE( CONCAT( MONTH( X.TIME ) ,  '월 ', DAY( X.TIME ) ,  '일 ', DATE_FORMAT( X.TIME,  '%p %h:%i' ) ) ,  'AM',  '오전' ) ,  'PM',  '오후' ) AS TIME			
+		 FROM (
+		 	SELECT * FROM DALANT
+			WHERE USER = #id#
+			ORDER BY TIME DESC
+		)X
 	</select>
 	
 	<insert id="charge" parameterClass="com.anoki.jaxb.User">

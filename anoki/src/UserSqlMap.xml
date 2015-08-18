@@ -52,7 +52,14 @@
 		,COUNTRY = #country#
 		</isNotEmpty>
 
-		WHERE ID = #id#
+		<dynamic prepend="where">		
+			<isNotEmpty property="id" prepend="and">		
+				ID = #id#
+			</isNotEmpty>
+			<isNotEmpty property="account"  prepend="and">		
+				ACCOUNT = #account#
+			</isNotEmpty>
+		</dynamic>
 	</update>
 
 

@@ -23,6 +23,7 @@
 		resultClass="com.anoki.jaxb.Friend">
 		SELECT * FROM(
 			SELECT
+				FRIEND.ID,
 				USER.PICTURE,
 				USER.NAME,
 				FRIEND.FRIEND,
@@ -37,6 +38,7 @@
 			</isNotEmpty>
 			UNION
 			SELECT
+				FRIEND.ID,
 				USER.PICTURE,
 				USER.NAME,
 				FRIEND.USER AS FRIEND, 
@@ -56,8 +58,16 @@
 	
 	<update id="updateFriend" parameterClass="com.anoki.jaxb.Friend">
 		UPDATE FRIEND SET STATE = #state#
-		WHERE (USER= #user# AND FRIEND = #friend#)
-		OR (FRIEND= #user# AND USER = #friend#)
+		
+		<dynamic prepend="where">
+			<isEmpty property="id">
+				(USER= #user# AND FRIEND = #friend#)
+				OR (FRIEND= #user# AND USER = #friend#)			
+			</isEmpty>
+			<isNotEmpty property="id">
+				ID=#id#
+			</isNotEmpty>
+		</dynamic>
 	</update>
 	
 	<insert id="addFriend" parameterClass="com.anoki.jaxb.Friend">
