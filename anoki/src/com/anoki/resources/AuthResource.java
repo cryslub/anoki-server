@@ -199,6 +199,7 @@ public class AuthResource {
 		
 		final String username = "cinderellamessenger@gmail.com";
 		final String password = "goodwill1004";
+		
  
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
