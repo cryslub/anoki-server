@@ -62,6 +62,9 @@
 		</dynamic>
 	</update>
 
+	<delete id="deleteUser" parameterClass="com.anoki.jaxb.User">		
+		DELETE USER WHERE ID = #id#
+	</delete>
 
 	<update id="bindPhone" parameterClass="com.anoki.jaxb.User">
 		UPDATE USER SET PHONE = '', COUNTRY=''
