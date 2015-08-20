@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -12,7 +13,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.anoki.jaxb.Dalant;
-import com.anoki.jaxb.Notice;
 import com.anoki.jaxb.Prayer;
 import com.anoki.jaxb.Response;
 import com.anoki.jaxb.Search;
@@ -77,6 +77,29 @@ public class UserResource {
 		
 		try {
 			Ibatis.smc.update("updateUser",user);
+			r.result = "0";		
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return r;
+	}
+	
+	
+	@DELETE
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)	
+	public Response delete(User user){
+		
+		Response r = new Response();
+
+		
+		user.id = Keys.getUserId(user.apiKey);
+		
+		try {
+			Ibatis.delete("deleteeUser",user);
 			r.result = "0";		
 
 		} catch (SQLException e) {
