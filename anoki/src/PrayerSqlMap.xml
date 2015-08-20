@@ -118,8 +118,15 @@
 		INSERT INTO REQUEST (
 			PRAYER,
 			USER
-		) VALUES 
-		<iterate  conjunction=", " property="friends">(#id#, #friends[]#)</iterate>
+		) SELECT #id#, USER.ID FROM USER
+		LEFT OUTER JOIN FRIEND 
+			ON( (FRIEND.USER = #userId# AND FRIEND.FRIEND = USER.ID)
+				OR (FRIEND.FRIEND = #userId# AND FRIEND.USER = USER.ID))
+			AND FRIEND.STATE != 'B'
+		WHERE USER.ID IN (
+			<iterate  conjunction=", " property="friends">#friends[]#</iterate>		
+		)
+	
 	</insert>
 	
 	
