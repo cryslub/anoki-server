@@ -83,10 +83,14 @@
 		SELECT ID FROM USER WHERE PHONE=#number#
 	</select>
 
+	<select id="getTempUserIdWithPhone" parameterClass="string" resultClass="int">
+		SELECT ID FROM USER WHERE PHONE=#number#
+		AND ACCOUNT IS NULL
+	</select>
 
 	<select id="getRealUserIdWithPhone" parameterClass="string" resultClass="int">
 		SELECT ID FROM USER WHERE PHONE=#number#
-		AND ACCOUNT != NULL
+		AND ACCOUNT IS NOT NULL
 	</select>
 
 	
