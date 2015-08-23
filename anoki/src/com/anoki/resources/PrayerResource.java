@@ -25,6 +25,7 @@ import com.anoki.jaxb.Reply;
 import com.anoki.jaxb.Response;
 import com.anoki.jaxb.Search;
 import com.anoki.jaxb.User;
+import com.anoki.singleton.Global;
 import com.anoki.singleton.Ibatis;
 import com.anoki.singleton.Keys;
 import com.anoki.singleton.Sms;
@@ -112,25 +113,24 @@ public class PrayerResource {
 
 			}
 			
-//			User user = new User();
-//			user.id = prayer.userId;
-//			user.dalant = prayer.dalant;
-//			
+			User user = new User();
+			user.id = prayer.userId;
+			user.dalant = -prayer.dalant;
+			
 //			if(user.dalant >= 0){
 //				Ibatis.insert("charge",user);
 //			}
-//
-//			if(prayer.friends.size() > 10){
-//				int size = prayer.friends.size();
-//				size -= 10;
-//				prayer.spend = size * 10;
-//				user.dalant -= prayer.spend;
-//				Ibatis.insert("spend",prayer);	
-//			}
+
+			if(prayer.friends.size() > Global.FREE_FRIENDS_COUNT){
+				int size = prayer.friends.size();
+				size -= Global.FREE_FRIENDS_COUNT;
+				prayer.spend = size * Global.DALANT_PER_PERSON;
+				Ibatis.insert("spend",prayer);	
+			}
 //			
-//			if(user.dalant != 0){
-//				Ibatis.update("addDalant", user);
-//			}
+			if(user.dalant != 0){
+				Ibatis.update("addDalant", user);
+			}
 
 			
 		} catch (SQLException e) {
