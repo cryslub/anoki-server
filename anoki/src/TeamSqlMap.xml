@@ -75,13 +75,17 @@
 			PICTURE,
 			TEXT,
 			SCOPE,
-			JOIN_ACK
+			JOIN_ACK,
+			REMAIN,
+			DALANT
 		) VALUES (
 			#name#,
 			#picture#,
 			#text#,
 			#scope#,
-			#joinAck#
+			#joinAck#,
+			#remain#,
+			#dalant#
 		)
 		
 		<selectKey keyProperty="id" resultClass="int">

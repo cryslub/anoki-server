@@ -103,6 +103,13 @@ public class TeamResource {
 		try {
 			team.userId = Keys.getUserId(team.apiKey);
 			team.leaderId = team.userId;
+			
+			if(team.multi == 10){
+				team.remain = 12;
+			}else{
+				team.remain = team.multi;
+			}
+			
 			team.id = Ibatis.insert("insertTeam",team);
 			Ibatis.insert("insertFirstMember",team);
 			

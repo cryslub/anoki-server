@@ -24,4 +24,7 @@ public class Team {
 	public int payDay;
 	public int leaderId;
 	public int leaderDalant;
+	
+	public int multi;
+	public int remain;
 }
