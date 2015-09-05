@@ -102,8 +102,23 @@ public class TeamResource {
 		
 		try {
 			team.userId = Keys.getUserId(team.apiKey);
+			team.leaderId = team.userId;
+			
+			if(team.multi == 10){
+				team.remain = 12;
+			}else{
+				team.remain = team.multi;
+			}
+			
 			team.id = Ibatis.insert("insertTeam",team);
 			Ibatis.insert("insertFirstMember",team);
+			
+			if(team.dalant>0){
+				Ibatis.insert("spendOnTeam",team);
+				Ibatis.update("spendTeamDalant",team);
+				Ibatis.update("paySucceed", team);
+
+			}
 			
 			r.result = "0";
 			
@@ -118,7 +133,7 @@ public class TeamResource {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	@POST
 	@Path("invite")
 	@Consumes(MediaType.APPLICATION_JSON)
