@@ -15,7 +15,8 @@
 <title>Insert title here</title>
 </head>
 <script>
-	window.location = "Intent://takePhoto#Intent;scheme=callMyApp;package=com.test.myapp;end";
+	window.location ="app-release.apk"
+//	window.location = "Intent://takePhoto#Intent;scheme=callMyApp;package=com.test.myapp;end";
 </script>
 <body>
 
