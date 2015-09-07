@@ -121,7 +121,7 @@ public class PrayerResource {
 //				Ibatis.insert("charge",user);
 //			}
 
-			if(prayer.friends.size() > Global.FREE_FRIENDS_COUNT){
+			if(prayer.friends != null && prayer.friends.size() > Global.FREE_FRIENDS_COUNT){
 				int size = prayer.friends.size();
 				size -= Global.FREE_FRIENDS_COUNT;
 				prayer.spend = size * Global.DALANT_PER_PERSON;
