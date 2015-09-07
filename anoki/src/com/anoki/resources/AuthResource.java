@@ -3,6 +3,7 @@ package com.anoki.resources;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -44,7 +45,7 @@ public class AuthResource {
 		String number = 		String.format("%04d", random);
 		System.out.println(number);
 		
-		AuthCodes.map.put(phone.country+phone.number+phone.device,number);
+		AuthCodes.map.put(phone.country+phone.number+phone.device,new Date());
 		
 		Sms.sendSms("sms",phone.number,"아노키 인증번호 "+number+"를 인증번호 입력란에 입력해 주세요");
 		
@@ -62,15 +63,19 @@ public class AuthResource {
 	@Produces(MediaType.APPLICATION_JSON)	
 	public Response sendAuthCode(Phone phone){
 		
-		String number = AuthCodes.map.get(phone.country+phone.number+phone.device);
+		Date date = AuthCodes.map.get(phone.country+phone.number+phone.device);
 		
 		Response r = new Response();
-		r.result = "1";
-
-		if(phone.auth.equals(number)){
-			r.result = "0";
+		
+		if(date== null){
+			r.result = "1";
+		}else if((new Date()).getTime() - date.getTime() > 180000){
+			r.result = "2";
+		}else{
+			r.result = "0";			
 			
 		}
+
 		
 		return r;
 	}
