@@ -11,4 +11,6 @@ public class Message {
 	public int id; //id
 	public String back; //배경색
 	public int user;
+	
+	public int checked;
 }

@@ -57,6 +57,7 @@ public class EtcResource {
 		List<Message> result = new ArrayList<Message>();
 		try {
 			result = (List<Message>) Ibatis.list("message",search);
+			Ibatis.delete("deleteMessage",search);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
