@@ -89,6 +89,7 @@ public class PrayerResource {
 					
 					if(id == null){
 						id = (Integer) Ibatis.insert("insertTempUser",phone);
+						sendInvite(user.name, phone);
 					}
 					
 					prayer.friends.add(id);
@@ -103,7 +104,6 @@ public class PrayerResource {
 						Ibatis.insert("addFriend", friend);
 					}
 					
-					sendInvite(user.name, phone);
 				}
 			}
 
