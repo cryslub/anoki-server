@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -62,6 +63,9 @@ public class PrayerResource {
 	}
 	
 	
+
+	
+	
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -74,7 +78,7 @@ public class PrayerResource {
 			prayer.id = Ibatis.insert("insertPrayer",prayer);
 			
 			if(prayer.media != null && prayer.media.size() > 0)
-				Ibatis.insert("updateMedia", prayer);
+				Ibatis.update("updateMedia", prayer);
 		
 			if(prayer.phone != null){
 				if(prayer.friends == null) prayer.friends = new ArrayList<Integer> ();
@@ -110,7 +114,6 @@ public class PrayerResource {
 			if(prayer.friends != null && prayer.friends.size()>0){
 				Ibatis.insert("insertRequest", prayer);
 				Ibatis.insert("insertRequestAlarm", prayer);
-
 			}
 			
 			User user = new User();
@@ -156,6 +159,11 @@ public class PrayerResource {
 		try {
 			Ibatis.update("updatePrayer", prayer);
 
+			Ibatis.update("resetMedia", prayer);
+			
+			if(prayer.media != null && prayer.media.size() > 0)
+				Ibatis.update("updateMedia", prayer);
+			
 			r.result = "0";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -169,6 +177,26 @@ public class PrayerResource {
 	private void sendInvite(String name, String number){
 		Sms.sendSms("lms",number,name + "님이 기도어플 아노키로 초대하셨습니다. 아래를 누르시면 " + name + "님과 친구가 됩니다. \n\n http://anoki.co.kr/anoki/invite.jsp");
 	}
+	
+
+	@DELETE
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response delete(Prayer prayer){
+		Response r = new Response();		
+		
+		try {
+			Ibatis.delete("deletePrayer", prayer);
+
+			r.result = "0";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return r;
+	}
+	
 	
 	@POST
 	@Path("upload")

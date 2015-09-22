@@ -105,6 +105,10 @@
 		</selectKey>
 	</insert>
 
+	<update id="resetMedia" parameterClass="com.anoki.jaxb.Prayer">
+		UPDATE MEDIA SET PRAYER = NULL
+		WHERE PRAYER = #id#
+	</update>
 
 	<update id="updateMedia" parameterClass="com.anoki.jaxb.Prayer">
 		UPDATE MEDIA SET PRAYER = #id#
@@ -256,9 +260,25 @@
 	
 	<update id="updatePrayer" parameterClass="com.anoki.jaxb.Prayer">
 		UPDATE PRAYER
-		SET IDX = #idx#
+		<dynamic prepend="SET">
+			<isNotEmpty property="idx" prepend=","> 	 	
+				IDX = #idx#
+			</isNotEmpty>	
+			<isNotEmpty property="back" prepend=","> 	 	
+				BACK = #back#
+			</isNotEmpty>	
+			<isNotEmpty property="text" prepend=","> 	 	
+				TEXT = #text#
+			</isNotEmpty>	
+		</dynamic>
 		WHERE ID = #id#
 	</update>
+	
+	
+	<delete id="deletePrayer" parameterClass="com.anoki.jaxb.Prayer">
+		DELETE FROM PRAYER
+		WHERE ID = #id#
+	</delete>
 	
 </sqlMap>
 
