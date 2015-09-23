@@ -104,4 +104,5 @@ public class FriendResource {
 		return invite;
 	}
 	
+	
 }

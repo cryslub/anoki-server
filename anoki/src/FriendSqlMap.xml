@@ -24,7 +24,6 @@
 		SELECT * FROM(
 			SELECT
 				FRIEND.ID,
-				USER.PICTURE,
 				USER.NAME,
 				FRIEND.FRIEND,
 				FRIEND.STATE,
@@ -76,6 +75,9 @@
 		) VALUES (#user#,#friend#)
 
 	</insert>
+	
+	
+	
 	
 </sqlMap>
 

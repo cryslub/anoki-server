@@ -32,7 +32,8 @@
 				USER.NAME AS SENDER,
 				MESSAGE.ID,
 				MESSAGE.BACK,
-				MESSAGE.USER AS USER
+				MESSAGE.USER AS USER,
+				USER.ID AS SENDERID
 			FROM MESSAGE 
 			LEFT OUTER JOIN USER ON MESSAGE.SENDER = USER.ID 
 			WHERE MESSAGE.USER = #id#
@@ -72,7 +73,7 @@
 		FROM USER
 		WHERE ID IN(
 		<iterate  conjunction=", " property="friends">
-			#friends[]# 
+			#friends[].friend# 
 		</iterate>
 		)
 	</insert>

@@ -26,6 +26,7 @@ import com.anoki.jaxb.Reply;
 import com.anoki.jaxb.Response;
 import com.anoki.jaxb.Search;
 import com.anoki.jaxb.User;
+import com.anoki.singleton.Common;
 import com.anoki.singleton.Global;
 import com.anoki.singleton.Ibatis;
 import com.anoki.singleton.Keys;
@@ -51,9 +52,8 @@ public class PrayerResource {
 		List<Prayer> result = new ArrayList<Prayer>();
 		try {
 			result = (List<Prayer>) Ibatis.list("recent",search);
-			for(Prayer prayer : result){
-				prayer.media = (List<Media>) Ibatis.list("mediaList",prayer);
-			}
+			result = Common.makePrayer(result);
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -81,7 +81,7 @@ public class PrayerResource {
 				Ibatis.update("updateMedia", prayer);
 		
 			if(prayer.phone != null){
-				if(prayer.friends == null) prayer.friends = new ArrayList<Integer> ();
+				if(prayer.friends == null) prayer.friends = new ArrayList<Friend> ();
 				
 				
 				User user = new User();
@@ -96,11 +96,12 @@ public class PrayerResource {
 						sendInvite(user.name, phone);
 					}
 					
-					prayer.friends.add(id);
 					
 					Friend friend = new Friend();
 					friend.user = prayer.userId;
 					friend.friend = id;
+					
+					prayer.friends.add(friend);
 					
 					Object obj= Ibatis.object("checkFriend", friend);
 					
@@ -352,7 +353,7 @@ public class PrayerResource {
 			r = (Prayer) Ibatis.object("getPrayer", search);
 			r.media = (List<Media>) Ibatis.list("mediaList",r);
 			r.reply = (List<Reply>) Ibatis.list("replyList",search);
-			
+			r.friends = (List<Friend>) Ibatis.list("requestFriends",r);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -397,7 +398,7 @@ public class PrayerResource {
 		List<Prayer> result = new ArrayList<Prayer>();
 		try {
 			
-			Ibatis.delete("deleteOldRequests");
+//			Ibatis.delete("deleteOldRequests");
 			result = (List<Prayer>) Ibatis.list("request",search);
 
 		} catch (SQLException e) {
