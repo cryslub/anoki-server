@@ -173,4 +173,10 @@
 	<insert id="insertScheduler">
 		INSERT INTO SCHEDULER() VALUES ()
 	</insert>
+	
+	<insert id="inform" parameterClass="com.anoki.jaxb.Search">
+		INSERT INTO INFORM(USER,TEXT,INFORMER)
+		VALUES(#searchId#,#searchKey#,#id#)
+	</insert>
+	
 </sqlMap>

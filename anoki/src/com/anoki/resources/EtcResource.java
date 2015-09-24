@@ -132,5 +132,27 @@ public class EtcResource {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
+	@POST
+	@Path("inform")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response inform(Search search) {
+
+		
+		Response r = new Response();
+		search.id = Keys.getUserId(search.apiKey);
+		
+		try {
+			Ibatis.list("inform",search);
+			r.result = "0";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return r;
+	}
+	
 }
 
