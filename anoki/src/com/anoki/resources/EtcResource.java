@@ -144,7 +144,7 @@ public class EtcResource {
 		search.id = Keys.getUserId(search.apiKey);
 		
 		try {
-			Ibatis.list("inform",search);
+			Ibatis.insert("inform",search);
 			r.result = "0";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

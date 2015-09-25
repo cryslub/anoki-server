@@ -25,4 +25,11 @@ public class Common {
 		
 		return result;
 	}
+	
+	
+
+	
+	public static void sendInvite(String name, String number){
+		Sms.sendSms("lms",number,name + "님이 기도어플 아노키로 초대하셨습니다. 아래를 누르시면 " + name + "님과 친구가 됩니다. \n\n http://anoki.co.kr/anoki/invite.jsp");
+	}
 }

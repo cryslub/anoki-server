@@ -13,9 +13,10 @@ import javax.ws.rs.core.MediaType;
 
 import com.anoki.jaxb.Friend;
 import com.anoki.jaxb.Invite;
-import com.anoki.jaxb.Phone;
 import com.anoki.jaxb.Response;
 import com.anoki.jaxb.Search;
+import com.anoki.jaxb.User;
+import com.anoki.singleton.Common;
 import com.anoki.singleton.Ibatis;
 import com.anoki.singleton.Keys;
 
@@ -74,21 +75,34 @@ public class FriendResource {
 			
 			invite.friends = new ArrayList<Integer>();
 			
+			
+			User user = new User();
+			user.id = invite.id;
+			user = (User)Ibatis.object("getUser", user);
+			
 			for(Friend phone : invite.phone){
 				
 				Integer id = (Integer)Ibatis.object("getRealUserIdWithPhone", phone.phone);
 				
-				if(id!=null){
+				if(id==null){
+
+					id = (Integer) Ibatis.insert("insertTempUser",phone.phone);
+					Common.sendInvite(user.name, phone.phone);
 					
-					Friend friend = new Friend();
-					friend.user = invite.id;
-					friend.friend = id;
-					
-					Integer friendId = (Integer) Ibatis.object("checkFriend",friend);
-					if(friendId == null){
-						Ibatis.insert("addFriend",friend);
-					}
 				}
+				
+					
+				Friend friend = new Friend();
+				friend.user = invite.id;
+				friend.friend = id;
+				
+				Integer friendId = (Integer) Ibatis.object("checkFriend",friend);
+				if(friendId == null){
+					Ibatis.insert("addFriend",friend);
+				}
+					
+					
+				
 				
 				invite.friends.add(id);
 			}

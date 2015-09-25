@@ -93,7 +93,7 @@ public class PrayerResource {
 					
 					if(id == null){
 						id = (Integer) Ibatis.insert("insertTempUser",phone);
-						sendInvite(user.name, phone);
+						Common.sendInvite(user.name, phone);
 					}
 					
 					
@@ -173,10 +173,6 @@ public class PrayerResource {
 		
 		return r;
 		
-	}
-	
-	private void sendInvite(String name, String number){
-		Sms.sendSms("lms",number,name + "님이 기도어플 아노키로 초대하셨습니다. 아래를 누르시면 " + name + "님과 친구가 됩니다. \n\n http://anoki.co.kr/anoki/invite.jsp");
 	}
 	
 
@@ -430,6 +426,27 @@ public class PrayerResource {
 		
 		return r;
 	}
+	
+	@DELETE
+	@Path("reply")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteReply(Reply reply) {
+		Response r = new Response();
+		
+		try {
+			Ibatis.insert("deleteReply", reply);
+
+			r.result = "0";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return r;
+	}
+	
 	
 	@POST
 	@Path("complete")

@@ -292,5 +292,10 @@
 		WHERE ID = #id#
 	</delete>
 	
+	
+	<delete id="deleteReply" parameterClass="com.anoki.jaxb.Reply">
+		DELETE FROM REPLY
+		WHERE ID = #id#
+	</delete>
 </sqlMap>
 
