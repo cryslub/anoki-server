@@ -18,6 +18,7 @@
 	<select id="getTeam" parameterClass="com.anoki.jaxb.Search"
 		resultClass="com.anoki.jaxb.Team">
 		SELECT 
+			TEAM.ID,
 			TEAM.PICTURE,
 			TEAM.NAME,
 			TEAM.TEXT,
