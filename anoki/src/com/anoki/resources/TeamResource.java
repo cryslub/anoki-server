@@ -96,9 +96,8 @@ public class TeamResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response post(Team team) {
+	public Team post(Team team) {
 		
-		Response r = new Response();
 		
 		try {
 			team.userId = Keys.getUserId(team.apiKey);
@@ -120,7 +119,6 @@ public class TeamResource {
 
 			}
 			
-			r.result = "0";
 			
 		} catch (SQLException e) {
 			
@@ -129,7 +127,7 @@ public class TeamResource {
 		}
 				
 				
-		return r;	
+		return team;	
 		
 	}
 	
@@ -149,9 +147,13 @@ public class TeamResource {
 				if(teamInvite.friends == null) teamInvite.friends = new ArrayList<Integer> ();
 				
 				for(Friend friend : teamInvite.phone){	
-					Phone phone = new Phone();
-					phone.number = friend.phone;
-					int id = (Integer) Ibatis.smc.insert("insertUser",phone);
+					User user = new User();
+					user.phone = friend.phone;
+					
+					Integer id  =(Integer) Ibatis.object("getTempUserIdWithPhone",user.phone);
+					if(id == null){
+						id = (Integer) Ibatis.smc.insert("insertUser",user);
+					}
 					teamInvite.friends.add(id);
 				}
 			}
@@ -164,7 +166,10 @@ public class TeamResource {
 					member.team = teamInvite.team;
 					member.user = friend;
 					
-					Ibatis.insert("insertMember", member);
+					Integer id  =(Integer) Ibatis.object("checkMember",member);
+					if(id==null){
+						Ibatis.insert("insertMember", member);
+					}
 //					Ibatis.insert("insertAlarm", teamInvite);
 				}
 
