@@ -27,4 +27,6 @@ public class Team {
 	
 	public int multi;
 	public int remain;
+	
+	public int role;
 }

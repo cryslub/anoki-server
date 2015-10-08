@@ -7,4 +7,6 @@ public class Member {
 	public int user;
 	public String role;
 	public String state;
+	public String name;
+	public String picture;
 }

@@ -6,7 +6,7 @@
 	<insert id="insertUser" parameterClass="com.anoki.jaxb.User">
 
 		INSERT INTO USER (ACCOUNT,PASS,COUNTRY,PHONE,NAME,PICTURE) VALUES
-		(#account#,#pass#,#country#,#phone#,#name#,#picture#)
+		(#account#,#pass#,IFNULL(#country#,'82'),#phone#,#name#,#picture#)
 
 		<selectKey keyProperty="id" resultClass="int">
 			SELECT LAST_INSERT_ID()

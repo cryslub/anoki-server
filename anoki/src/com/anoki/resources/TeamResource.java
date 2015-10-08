@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -14,7 +15,6 @@ import javax.ws.rs.core.MediaType;
 import com.anoki.jaxb.Friend;
 import com.anoki.jaxb.Invite;
 import com.anoki.jaxb.Member;
-import com.anoki.jaxb.Phone;
 import com.anoki.jaxb.Prayer;
 import com.anoki.jaxb.Response;
 import com.anoki.jaxb.Search;
@@ -190,13 +190,13 @@ public class TeamResource {
 	@Path("members")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<User> members(Search search) {
+	public List<Member> members(Search search) {
 		
 		
-		List<User> r = new ArrayList<User>();
+		List<Member> r = new ArrayList<Member>();
 		
 		try {
-			r = (List<User>) Ibatis.list("teamMembers", search);
+			r = (List<Member>) Ibatis.list("teamMembers", search);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -218,6 +218,32 @@ public class TeamResource {
 		
 		try {
 			Ibatis.update("updateMember", member);
+			r.result = "0";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return r;
+	}
+	
+	
+	@DELETE
+	@Path("member")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response leave(Member member) {
+		
+		Response r = new Response();
+				
+		
+		
+		try {
+			
+//			member.user = Keys.getUserId(member.apiKey);
+			
+			Ibatis.update("deleteMember", member);
 			r.result = "0";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

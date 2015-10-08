@@ -35,7 +35,10 @@
 			TEAM.PROFILE_AUTH AS PROFILEAUTH,
 			TEAM.REGISTER_AUTH AS REGISTERAUTH,
 			TEAM.INVITE_AUTH AS INVITEAUTH,
-			TEAM.LEAVE_AUTH AS LEAVEAUTH			
+			TEAM.LEAVE_AUTH AS LEAVEAUTH,
+			DATEDIFF(TEAM.UNTIL,NOW())  AS REMAIN,
+			MEMBER.ROLE,
+			TEAM.DALANT
 		FROM TEAM
 		LEFT OUTER JOIN MEMBER ON TEAM.ID = MEMBER.TEAM AND MEMBER.USER = #id#  
 		WHERE TEAM.ID = #searchId#
@@ -109,7 +112,7 @@
 			#id#,
 			#userId#,
 			'J',
-			'3'
+			3
 		)
 	</insert>
 	
@@ -131,11 +134,13 @@
 	
 	
 	<select id="teamMembers" parameterClass="com.anoki.jaxb.Search"
-		resultClass="com.anoki.jaxb.User">
+		resultClass="com.anoki.jaxb.Member">
 		SELECT
 			USER.PICTURE,
 			USER.NAME,
-			USER.ID
+			USER.ID AS USER,
+			MEMBER.STATE,
+			MEMBER.ROLE
 		FROM MEMBER
 			LEFT OUTER JOIN USER ON MEMBER.USER = USER.ID
 		WHERE
@@ -145,22 +150,46 @@
 	</select>
 	
 	<update id="updateMember" parameterClass="com.anoki.jaxb.Member">
-		UPDATE MEMBER SET ROLE = #role#
+		UPDATE MEMBER 
+		SET ROLE = #role#,
+		STATE = #state#
 		WHERE TEAM = #team#
 		AND USER = #user#
 	</update>
+	
+	<delete id="deleteMember" parameterClass="com.anoki.jaxb.Member">
+		DELETE FROM MEMBER
+		WHERE TEAM = #team#
+		AND USER = #user#
+	</delete>
 
 	<update id="updateTeam" parameterClass="com.anoki.jaxb.Team">
 		UPDATE TEAM SET 
 		PICTURE = #picture#
+		<isNotEmpty property="name">		
 		, NAME = #name#
+		</isNotEmpty>
+		<isNotEmpty property="text">		
 		, TEXT = #text#
+		</isNotEmpty>
+		<isNotEmpty property="scope">		
 		, SCOPE = #scope#
+		</isNotEmpty>
+		<isNotEmpty property="joinAck">				
 		, JOIN_ACK = #joinAck#
+		</isNotEmpty>
+		<isNotEmpty property="profileAuth">				
 		, PROFILE_AUTH = #profileAuth#
+		</isNotEmpty>
+		<isNotEmpty property="registerAuth">				
 		, REGISTER_AUTH = #registerAuth#
+		</isNotEmpty>
+		<isNotEmpty property="inviteAuth">				
 		, INVITE_AUTH = #inviteAuth#
-		, LEAVE_AUTH = #leaveAuth#		
+		</isNotEmpty>
+		<isNotEmpty property="leaveAuth">				
+		, LEAVE_AUTH = #leaveAuth#
+		</isNotEmpty>
 		WHERE ID = #id#
 	</update>
 
