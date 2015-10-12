@@ -207,6 +207,50 @@ public class TeamResource {
 		return r;
 	}
 	
+	@POST
+	@Path("leaders")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Member> leaders(Search search) {
+		
+		
+		List<Member> r = new ArrayList<Member>();
+		
+		try {
+			r = (List<Member>) Ibatis.list("teamLeaders", search);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return r;
+	}
+	
+	@POST
+	@Path("set/leaders")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Member> setLeaders(Invite invite) {
+		
+		
+		List<Member> r = new ArrayList<Member>();
+		
+		try {
+			r = (List<Member>) Ibatis.list("setLeaders", invite);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return r;
+	}
+
+
+	
 	@PUT
 	@Path("member")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -265,6 +309,26 @@ public class TeamResource {
 		
 		try {
 			Ibatis.update("updateTeam", team);
+			r.result = "0";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return r;
+	}
+	
+	
+	@DELETE
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response delete(Team team) {
+	Response r = new Response();
+				
+		
+		try {
+			Ibatis.update("deleteTeam", team);
 			r.result = "0";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

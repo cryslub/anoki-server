@@ -44,6 +44,7 @@
 		WHERE TEAM.ID = #searchId#
 	</select>
 	
+
 	
 	
 	<select id="teamPrayer" parameterClass="com.anoki.jaxb.Search"
@@ -149,6 +150,33 @@
 		LIMIT #page#,#size#
 	</select>
 	
+	<select id="teamLeaders" parameterClass="com.anoki.jaxb.Search"
+		resultClass="com.anoki.jaxb.Member">
+		SELECT
+			USER.PICTURE,
+			USER.NAME,
+			USER.ID AS USER,
+			MEMBER.STATE,
+			MEMBER.ROLE
+		FROM MEMBER
+			LEFT OUTER JOIN USER ON MEMBER.USER = USER.ID
+		WHERE
+			MEMBER.TEAM = #searchId#
+			AND MEMBER.ROLE != '1'
+		LIMIT #page#,#size#
+	</select>
+	
+	<update id="setLeaders" parameterClass="com.anoki.jaxb.Invite">
+		UPDATE MEMBER
+		SET ROLE = '2'
+		WHERE TEAM = #id#
+		AND USER IN (
+			<iterate  conjunction=", " property="phone">
+				#phone[].friend# 
+			</iterate>
+		)
+	</update>
+	
 	<update id="updateMember" parameterClass="com.anoki.jaxb.Member">
 		UPDATE MEMBER 
 		SET ROLE = #role#,
@@ -190,8 +218,16 @@
 		<isNotEmpty property="leaveAuth">				
 		, LEAVE_AUTH = #leaveAuth#
 		</isNotEmpty>
+		<isNotEmpty property="dalant">				
+		, DALANT = #dalant#
+		</isNotEmpty>
 		WHERE ID = #id#
 	</update>
+	
+	<delete id="deleteTeam" parameterClass="com.anoki.jaxb.Team">
+		DELETE FROM TEAM
+		WHERE ID = #id#
+	</delete>
 
 	<insert id="join" parameterClass="com.anoki.jaxb.Member">
 		INSERT INTO MEMBER (
