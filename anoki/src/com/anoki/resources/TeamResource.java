@@ -103,11 +103,11 @@ public class TeamResource {
 			team.userId = Keys.getUserId(team.apiKey);
 			team.leaderId = team.userId;
 			
-			if(team.multi == 10){
-				team.remain = 12;
-			}else{
-				team.remain = team.multi;
-			}
+//			if(team.multi == 10){
+//				team.remain = 12;
+//			}else{
+//				team.remain = team.multi;
+//			}
 			
 			team.id = Ibatis.insert("insertTeam",team);
 			Ibatis.insert("insertFirstMember",team);
@@ -238,7 +238,7 @@ public class TeamResource {
 		List<Member> r = new ArrayList<Member>();
 		
 		try {
-			r = (List<Member>) Ibatis.list("setLeaders", invite);
+			Ibatis.update("setLeaders", invite);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -297,6 +297,34 @@ public class TeamResource {
 		
 		return r;
 	}
+
+	
+	@POST
+	@Path("charge")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response charge(Team team) {
+		
+		Response r = new Response();
+		team.leaderId = Keys.getUserId(team.apiKey);
+		
+		try {
+			Ibatis.update("teamCharge", team);
+			
+			Ibatis.insert("spendOnTeam",team);
+			Ibatis.update("spendTeamDalant",team);
+			Ibatis.update("paySucceed", team);
+			
+			r.result = "0";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return r;
+	}
+
 	
 	
 	@PUT

@@ -37,7 +37,7 @@
 			TEAM.INVITE_AUTH AS INVITEAUTH,
 			TEAM.LEAVE_AUTH AS LEAVEAUTH,
 			DATEDIFF(TEAM.UNTIL,NOW())  AS REMAIN,
-			MEMBER.ROLE,
+			IFNULL(MEMBER.ROLE,'0') AS ROLE,
 			TEAM.DALANT
 		FROM TEAM
 		LEFT OUTER JOIN MEMBER ON TEAM.ID = MEMBER.TEAM AND MEMBER.USER = #id#  
@@ -87,7 +87,8 @@
 			SCOPE,
 			JOIN_ACK,
 			REMAIN,
-			DALANT
+			DALANT,
+			UNTIL
 		) VALUES (
 			#name#,
 			#picture#,
@@ -95,7 +96,8 @@
 			#scope#,
 			#joinAck#,
 			#remain#,
-			#dalant#
+			#dalant#,
+			DATE_ADD(NOW(),INTERVAL #remain# DAY)
 		)
 		
 		<selectKey keyProperty="id" resultClass="int">
@@ -141,12 +143,19 @@
 			USER.NAME,
 			USER.ID AS USER,
 			MEMBER.STATE,
-			MEMBER.ROLE
+			MEMBER.ROLE,
+			MEMBER.TEAM
 		FROM MEMBER
-			LEFT OUTER JOIN USER ON MEMBER.USER = USER.ID
+		JOIN USER ON MEMBER.USER = USER.ID
 		WHERE
 			MEMBER.TEAM = #searchId#
 			AND MEMBER.STATE = #searchKey#
+			<isEqual property="searchType" compareValue="setLeader">
+				AND MEMBER.ROLE = '1'
+			</isEqual>
+			<isEqual property="searchType" compareValue="leaders">
+				AND MEMBER.ROLE != '1'
+			</isEqual>
 		LIMIT #page#,#size#
 	</select>
 	
@@ -222,6 +231,13 @@
 		, DALANT = #dalant#
 		</isNotEmpty>
 		WHERE ID = #id#
+	</update>
+	
+	<update id="teamCharge" parameterClass="com.anoki.jaxb.Team">
+		UPDATE TEAM SET 
+		REMAIN = REMAIN + #remain#
+		, UNTIL = DATE_ADD(UNTIL, INTERVAL #remain# DAY)
+		WHERE ID = #id#		
 	</update>
 	
 	<delete id="deleteTeam" parameterClass="com.anoki.jaxb.Team">
