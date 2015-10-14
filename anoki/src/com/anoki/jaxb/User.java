@@ -16,5 +16,5 @@ public class User {
 	public String country;
 	public String phone;
 	public int dalant;
-	
+	public String regid;
 }

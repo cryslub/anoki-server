@@ -31,27 +31,37 @@
 	</update>
 
 	<update id="updateUser" parameterClass="com.anoki.jaxb.User">
-		UPDATE USER SET NAME = #name#
-		,TEXT = #text#
-		<isNotEmpty property="account">		
-		,ACCOUNT = #account#
-		</isNotEmpty>		
-		<isNotEmpty property="picture">		
-		,PICTURE = #picture#
-		</isNotEmpty>
-		<isNotEmpty property="showPhone">
-		,SHOW_PHONE = #showPhone#
-		</isNotEmpty>
-		<isNotEmpty property="pass">		
-		,PASS = #pass#
-		</isNotEmpty>
-		<isNotEmpty property="phone">		
-		,PHONE = #phone#
-		</isNotEmpty>
-		<isNotEmpty property="country">		
-		,COUNTRY = #country#
-		</isNotEmpty>
-
+		UPDATE USER 
+		<dynamic prepend=" SET ">
+			<isNotEmpty property="name" prepend=",">		
+			NAME = #name#
+			</isNotEmpty>	
+			<isNotEmpty property="text" prepend=",">		
+			TEXT = #text#
+			</isNotEmpty>					
+			<isNotEmpty property="account" prepend=",">		
+			ACCOUNT = #account#
+			</isNotEmpty>		
+			<isNotEmpty property="picture" prepend=",">		
+			PICTURE = #picture#
+			</isNotEmpty>
+			<isNotEmpty property="showPhone" prepend=",">
+			SHOW_PHONE = #showPhone#
+			</isNotEmpty>
+			<isNotEmpty property="pass" prepend=",">		
+			PASS = #pass#
+			</isNotEmpty>
+			<isNotEmpty property="phone" prepend=",">		
+			PHONE = #phone#
+			</isNotEmpty>
+			<isNotEmpty property="country" prepend=",">		
+			COUNTRY = #country#
+			</isNotEmpty>
+			<isNotEmpty property="regid" prepend=",">		
+			REGID = #regid#
+			</isNotEmpty>
+		</dynamic>
+	
 		<dynamic prepend="where">		
 			<isNotEmpty property="id" prepend="and">		
 				ID = #id#
@@ -119,7 +129,8 @@
 			SHOW_PHONE AS SHOWPHONE,
 			COUNTRY,
 			PHONE,
-			DALANT
+			DALANT,
+			REGID
 		 FROM USER WHERE ID = #id#
 	</select>
 	
