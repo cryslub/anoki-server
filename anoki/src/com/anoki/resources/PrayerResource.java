@@ -114,7 +114,13 @@ public class PrayerResource {
 
 			if(prayer.friends != null && prayer.friends.size()>0){
 				Ibatis.insert("insertRequest", prayer);
+				
 				Ibatis.insert("insertRequestAlarm", prayer);
+				
+				List<String> list = (List<String>)Ibatis.list("getRegIds", prayer);
+				for(String regId : list){
+					Common.gcm(regId, "Q", prayer.userName);
+				}
 			}
 			
 			User user = new User();

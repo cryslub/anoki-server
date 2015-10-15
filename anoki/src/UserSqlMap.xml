@@ -116,8 +116,6 @@
 		SELECT ID FROM USER WHERE ID=#id# AND PASS=#searchKey#
 	</select>
 	
-	
-	
 	<select id="getUser" parameterClass="com.anoki.jaxb.User"
 		resultClass="com.anoki.jaxb.User">
 		SELECT 
@@ -194,5 +192,15 @@
 		WHERE ID = #leaderId#
 	</update>
 	
+	<select id="getRegIds" parameterClass="com.anoki.jaxb.Prayer" resultClass="string">
+		SELECT 
+			REGID
+		FROM USER
+		WHERE ID IN(
+		<iterate  conjunction=", " property="friends">
+			#friends[].friend# 
+		</iterate>
+		)
+	</select>
 	
 </sqlMap>

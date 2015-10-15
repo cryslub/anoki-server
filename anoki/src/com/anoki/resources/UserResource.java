@@ -18,6 +18,7 @@ import com.anoki.jaxb.Response;
 import com.anoki.jaxb.Search;
 import com.anoki.jaxb.Team;
 import com.anoki.jaxb.User;
+import com.anoki.singleton.Common;
 import com.anoki.singleton.Ibatis;
 import com.anoki.singleton.Keys;
 
@@ -45,6 +46,13 @@ public class UserResource {
 				}else{
 					user.id = r.id;
 					Ibatis.update("updateUser",user);					
+					
+					Ibatis.insert("insertFriendAlarm",r.id);
+					
+					List<String> list = (List<String>) Ibatis.list("getFriendRegIds", r.id);
+					for(String regId:list){
+						Common.gcm(regId, "F", r.id);
+					}
 				}
 				
 				

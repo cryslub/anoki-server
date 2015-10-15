@@ -12,7 +12,8 @@
 			NAME1,
 			NAME2,			
 			TIME,
-			PICTURE
+			PICTURE,
+			GID
 		FROM ALARM 
 		WHERE USER = #id#
 	</select>
@@ -79,21 +80,30 @@
 	</insert>
 	
 	
-	<insert id="insertFriendAlarm" parameterClass="String">
+	<insert id="insertFriendAlarm" parameterClass="int">
 		INSERT INTO ALARM (
 			USER,
 			TYPE,
 			NAME1,
-			PICTURE
+			PICTURE,
+			GID
 		) 
 		SELECT 
-			USER.ID,
+			FRIEND.USER,
 			'F',
 			USER.NAME,
-			USER.PICTURE
+			USER.PICTURE,
+			USER.ID
 		FROM FRIEND LEFT OUTER JOIN USER ON FRIEND.FRIEND = USER.ID
-		WHERE FRIEND.ID = #id#
+		AND FRIEND.FRIEND = #friend#
 	</insert>
+	
+	<select id="getFriendRegIds" parameterClass="int" resultClass="string">
+		SELECT 
+			USER.REGID
+		FROM FRIEND LEFT OUTER JOIN USER ON FRIEND.USER = USER.ID
+		AND FRIEND.FRIEND = #friend#		
+	</select>
 	
 	<select id="notice"
 		resultClass="com.anoki.jaxb.Notice">
