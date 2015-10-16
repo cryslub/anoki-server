@@ -12,7 +12,7 @@
 			NAME1,
 			NAME2,			
 			TIME,
-			PICTURE,
+			IFNULL(PICTURE,-1),
 			GID
 		FROM ALARM 
 		WHERE USER = #id#
@@ -106,21 +106,33 @@
 			NAME2,
 			PICTURE,
 			GID
-		)
+		)		
 		SELECT 
 			A.ID,
-			#type#,	
-			B.NAME,
+			#type#,
 			A.NAME,
+			B.NAME,
 			B.PICTURE,
-			#prayer#		
-		FROM PRAYER,USER A, USER B, SCRAP
-		WHERE PRAYER.ID = #prayer#
-		AND PRAYER.USER = A.ID
-		OR( SCRAP.PRAYER = PRAYER.ID
-		AND SCRAP.USER = A.ID)
-		AND A.ID != #userId#
+			#prayer#
+		FROM PRAYER,USER A, USER B
+		WHERE PRAYER.USER = A.ID
 		AND B.ID = #userId#
+		AND A.ID != #userId#
+		AND PRAYER.ID = #prayer#
+		UNION
+		SELECT
+			SCRAP.USER,
+			#type#,
+			A.NAME,
+			B.NAME,
+			B.PICTURE,
+			#prayer#
+		FROM PRAYER,USER A, USER B,SCRAP
+		WHERE PRAYER.USER= A.ID
+		AND SCRAP.PRAYER = PRAYER.ID
+		AND B.ID = #userId#
+		AND A.ID != #userId#
+		AND PRAYER.ID = #prayer#		
 	</insert>
 	
 	<insert id="insertGroupAlarm" parameterClass="int">

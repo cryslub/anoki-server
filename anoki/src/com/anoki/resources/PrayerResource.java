@@ -440,7 +440,7 @@ public class PrayerResource {
 				@SuppressWarnings("unchecked")
 				List<String> list = (List<String>)Ibatis.list("getResponseRegIds", reply);
 				for(String regId : list){
-					Common.gcm(regId, "R", user.name);
+					Common.gcm(regId, "R", null, user.name);
 				}
 
 			}else{
