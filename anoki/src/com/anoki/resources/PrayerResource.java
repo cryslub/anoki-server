@@ -30,7 +30,6 @@ import com.anoki.singleton.Common;
 import com.anoki.singleton.Global;
 import com.anoki.singleton.Ibatis;
 import com.anoki.singleton.Keys;
-import com.anoki.singleton.Sms;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
@@ -117,6 +116,7 @@ public class PrayerResource {
 				
 				Ibatis.insert("insertRequestAlarm", prayer);
 				
+				@SuppressWarnings("unchecked")
 				List<String> list = (List<String>)Ibatis.list("getRegIds", prayer);
 				for(String regId : list){
 					Common.gcm(regId, "Q", prayer.userName);
@@ -142,6 +142,10 @@ public class PrayerResource {
 				Ibatis.update("addDalant", user);
 			}
 
+			
+			if(prayer.team >= 0){
+				Ibatis.insert("insertGroupAlarm",prayer.id);
+			}
 			
 		} catch (SQLException e) {
 			
@@ -170,6 +174,8 @@ public class PrayerResource {
 			
 			if(prayer.media != null && prayer.media.size() > 0)
 				Ibatis.update("updateMedia", prayer);
+			
+			
 			
 			r.result = "0";
 		} catch (SQLException e) {
@@ -422,7 +428,32 @@ public class PrayerResource {
 		
 		try {
 			Ibatis.insert("insertReply", reply);
+			Ibatis.insert("insertResponseAlarm",reply);
+			
+			User user = new User();
+			user.id = reply.userId;
+			user = (User) Ibatis.object("getUser", user);
 
+			if("R".equals(reply.type)){
+				
+				
+				@SuppressWarnings("unchecked")
+				List<String> list = (List<String>)Ibatis.list("getResponseRegIds", reply);
+				for(String regId : list){
+					Common.gcm(regId, "R", user.name);
+				}
+
+			}else{
+				
+				String prayerOwner = (String) Ibatis.object("getPrayerOwner", reply.prayer);
+				
+				@SuppressWarnings("unchecked")
+				List<String> list = (List<String>)Ibatis.list("getResponseRegIds", reply);
+				for(String regId : list){
+					Common.gcm(regId, "S", prayerOwner,user.name);
+				}
+			}
+			
 			r.result = "0";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -49,10 +49,10 @@ public class UserResource {
 					
 					Ibatis.insert("insertFriendAlarm",r.id);
 					
-					List<String> list = (List<String>) Ibatis.list("getFriendRegIds", r.id);
-					for(String regId:list){
-						Common.gcm(regId, "F", r.id);
-					}
+//					List<User> list = (List<User>) Ibatis.list("getFriendRegIds", r.id);
+//					for(User u:list){
+//						Common.gcm(u.regid, "F", user.name);
+//					}
 				}
 				
 				

@@ -1,9 +1,11 @@
 package com.anoki.singleton;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,6 +18,7 @@ import com.anoki.jaxb.Content;
 import com.anoki.jaxb.Friend;
 import com.anoki.jaxb.Media;
 import com.anoki.jaxb.Prayer;
+import com.google.gson.Gson;
 
 public class Common {
 
@@ -50,12 +53,16 @@ public class Common {
 	}
 	
 	public static void gcm(String regId, String type, String name1){
+		gcm(regId,type,name1,null);
+	}
+	
+	public static void gcm(String regId, String type, String name1,String name2){
 
 		String apiKey = "AIzaSyDyeoW2oYgLX4iWfmAOAdY4SsdKEHgz0Mo";
 		
 		Content content = new Content();
 		content.addRegId(regId);
-		content.createData(type, name1);
+		content.createData(type, name1,name2);
 		
         try{
 
@@ -82,11 +89,14 @@ public class Common {
             // 5.2 Get connection output stream
             DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
 
-            // 5.3 Copy Content "JSON" into
-            mapper.writeValue(wr, content);
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(wr, "UTF-8"));
 
-            // 5.4 Send the request
-            wr.flush();
+            Gson gson = new Gson();
+
+			writer.write(gson.toJson(content));
+			writer.close();
+
+			
 
             // 5.5 close
             wr.close();

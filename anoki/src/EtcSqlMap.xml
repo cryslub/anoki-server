@@ -98,11 +98,75 @@
 		AND FRIEND.FRIEND = #friend#
 	</insert>
 	
-	<select id="getFriendRegIds" parameterClass="int" resultClass="string">
+	<insert id="insertResponseAlarm" parameterClass="com.anoki.jaxb.Reply">
+		INSERT INTO ALARM(
+			USER,
+			TYPE,
+			NAME1,
+			NAME2,
+			PICTURE,
+			GID
+		)
 		SELECT 
-			USER.REGID
+			A.ID,
+			#type#,	
+			B.NAME,
+			A.NAME,
+			B.PICTURE,
+			#prayer#		
+		FROM PRAYER,USER A, USER B, SCRAP
+		WHERE PRAYER.ID = #prayer#
+		AND PRAYER.USER = A.ID
+		OR( SCRAP.PRAYER = PRAYER.ID
+		AND SCRAP.USER = A.ID)
+		AND A.ID != #userId#
+		AND B.ID = #userId#
+	</insert>
+	
+	<insert id="insertGroupAlarm" parameterClass="int">
+		INSERT INTO ALARM(
+			USER,
+			TYPE,
+			NAME1,
+			PICTURE,
+			GID
+		)SELECT
+			MEMBER.USER,
+			'G',
+			TEAM.NAME,
+			TEAM.PICTURE,
+			TEAM.ID
+		FROM MEMBER, TEAM, PRAYER
+		WHERE MEMBER.TEAM = TEAM.ID
+		AND PRAYER.TEAM = TEAM.ID
+		AND PRAYER.ID = #id#
+	</insert> 
+	
+	<select id="getFriendRegIds" parameterClass="int" resultClass="com.anoki.jaxb.User">
+		SELECT 
+			USER.REGID,
+			USER.NAME
 		FROM FRIEND LEFT OUTER JOIN USER ON FRIEND.USER = USER.ID
 		AND FRIEND.FRIEND = #friend#		
+	</select>
+	
+	<select id="getResponseRegIds" parameterClass="com.anoki.jaxb.Reply" resultClass="string">
+		SELECT 
+			USER.REGID
+		FROM PRAYER,USER
+		WHERE PRAYER.USER = USER.ID
+		AND USER.REGID IS NOT NULL
+		AND USER.ID != #userId#
+		AND PRAYER.ID = #prayer#
+		UNION
+		SELECT
+			USER.REGID
+		FROM PRAYER,USER,SCRAP
+		WHERE SCRAP.USER= USER.ID
+		AND SCRAP.PRAYER = PRAYER.ID
+		AND USER.REGID IS NOT NULL
+		AND USER.ID != #userId#
+		AND PRAYER.ID = #prayer#
 	</select>
 	
 	<select id="notice"

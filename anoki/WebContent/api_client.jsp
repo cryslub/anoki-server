@@ -40,17 +40,17 @@ if( res.getCode().compareTo("0000") == 0 )
 
 
  //실제 발송 결과 조회
-String arr[] = new String[7];
+arr = new String[7];
 arr[0] = "status_by_ref";
 arr[1] = "_UNIQUE_KEY_";	// 발송 시 사용하였던 _UNIQUE_KEY_ 로 조회
 // 확인할 수 있는 건수는 제한이 될수도 있습니다. 같은 키가 존재하는 경우 최근의 한건이 나오게 변경될 예정입니다.
 
 //ApiClass api = new ApiClass(arr[0], arr[1]);
-String responseXml = api.send(arr);
+responseXml = api.send(arr);
 System.out.println("response xml : \n" + responseXml);
 
 
-ApiResult res = api.getResult( responseXml );
+res = api.getResult( responseXml );
 System.out.println( "code = [" + res.getCode() + "] mesg=[" + res.getMesg() + "]" );
 
 if( res.getCode().compareTo("0000") == 0 )

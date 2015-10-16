@@ -132,6 +132,12 @@
 		 FROM USER WHERE ID = #id#
 	</select>
 	
+	<select id="getPrayerOwner" parameterClass="int" resultClass="string">
+		SELECT USER.NAME
+		FROM USER , PRAYER
+		WHERE PRAYER.USER = USER.ID
+		AND PRAYER.ID = #id#
+	</select>
 	
 	<select id="userPrayer" parameterClass="com.anoki.jaxb.Search"
 		resultClass="com.anoki.jaxb.Prayer">
