@@ -33,4 +33,7 @@ public class Prayer {
 	public String long_time;
 	public String requestId;
 	public int idx;
+	
+
+	public boolean edit;
 }
