@@ -34,6 +34,6 @@ public class Prayer {
 	public String requestId;
 	public int idx;
 	
-
+	public int checked;
 	public boolean edit;
 }
