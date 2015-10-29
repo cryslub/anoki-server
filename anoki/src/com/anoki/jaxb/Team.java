@@ -15,10 +15,10 @@ public class Team {
 	public String memberCount;
 	
 	
-	public String profileAuth;
-	public String registerAuth;
-	public String inviteAuth;
-	public String leaveAuth;
+	public int profileAuth;
+	public int registerAuth;
+	public int inviteAuth;
+	public int leaveAuth;
 	
 	public int dalant;
 	public int payDay;
