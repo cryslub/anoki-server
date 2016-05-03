@@ -45,7 +45,7 @@ public class AuthResource {
 		String number = 		String.format("%04d", random);
 		System.out.println(number);
 		
-		AuthCodes.map.put(phone.country+phone.number+phone.device,new Date());
+		AuthCodes.map.put(phone.country+phone.number+phone.device+number,new Date());
 		
 		Sms.sendSms("sms",phone.number,"아노키 인증번호 "+number+"를 인증번호 입력란에 입력해 주세요");
 		
@@ -63,7 +63,7 @@ public class AuthResource {
 	@Produces(MediaType.APPLICATION_JSON)	
 	public Response sendAuthCode(Phone phone){
 		
-		Date date = AuthCodes.map.get(phone.country+phone.number+phone.device);
+		Date date = AuthCodes.map.get(phone.country+phone.number+phone.device+phone.auth);
 		
 		Response r = new Response();
 		
@@ -185,7 +185,7 @@ public class AuthResource {
 			SecureRandom random = new SecureRandom();
 			String newPass = new BigInteger(130, random).toString(32);			
 			user.pass = newPass.substring(15);
-			Ibatis.update("updateUser",user);
+			Ibatis.update("updateUserPass",user);
 			
 			sendEmail(user.account,user.pass);
 			
@@ -203,7 +203,7 @@ public class AuthResource {
 	private void sendEmail(String email, String pass){
 		
 		final String username = "cinderellamessenger@gmail.com";
-		final String password = "goodwill1004";
+		final String password = "goodwill@4";
 		
  
 		Properties props = new Properties();
@@ -222,10 +222,10 @@ public class AuthResource {
 		try {
  
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("noreply@anoki.co.kr"));
+			message.setFrom(new InternetAddress("cinderellamessenger@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse(email));
-			message.setSubject("아노키 비밃번호 재설정");
+			message.setSubject("아노키 비밀번호 재설정");
 			message.setText("변경된 비밀번호 입니다.,"
 				+ "\n\n "+pass);
  

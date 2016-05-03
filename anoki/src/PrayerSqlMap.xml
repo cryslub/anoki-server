@@ -28,10 +28,9 @@
 		LEFT OUTER JOIN SCRAP ON PRAYER.ID = SCRAP.PRAYER AND SCRAP.USER=#id#
 		WHERE(
 			PRAYER.USER = #id#
-			OR PRAYER.PUBLIC = 'P' AND PRAYER.USER IN (SELECT FRIEND FROM FRIEND
-			WHERE USER = #id# AND STATE != 'B')
-			OR PRAYER.PUBLIC = 'P' AND PRAYER.USER IN (SELECT USER FROM FRIEND
-			WHERE FRIEND = #id# AND STATE != 'B'))
+			OR( PRAYER.PUBLIC = 'P' AND PRAYER.USER IN (SELECT FRIEND FROM FRIEND WHERE USER = #id# AND STATE != 'B'))
+			OR( PRAYER.PUBLIC = 'P' AND PRAYER.USER IN (SELECT USER FROM FRIEND WHERE FRIEND = #id# AND STATE != 'B'))
+			OR (PRAYER.PUBLIC = 'F' AND #id# IN (SELECT USER FROM REQUEST WHERE PRAYER = PRAYER.ID)))
 		AND PRAYER.TEAM = -1
 		ORDER
 		BY PRAYER.TIME DESC
@@ -103,7 +102,8 @@
 			REPLY.PUBLIC = 'P' 
 			OR REPLY.USER = #id# 
 			OR PRAYER.USER = #id#
-		)	
+		)
+		ORDER BY REPLY.TIME
 	</select>
 
 
@@ -160,6 +160,10 @@
 	</insert>
 	
 	
+	<update id="updateMediaType" parameterClass="string">
+		UPDATE MEDIA SET TYPE = 'V'
+		WHERE ID = #id#
+	</update>
 	
 	
 	<insert id="insertScrap" parameterClass="com.anoki.jaxb.Prayer">

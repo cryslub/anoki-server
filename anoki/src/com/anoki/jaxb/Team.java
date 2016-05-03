@@ -29,4 +29,5 @@ public class Team {
 	public int remain;
 	
 	public int role;
+	public int init;
 }

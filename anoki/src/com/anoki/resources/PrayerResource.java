@@ -19,6 +19,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.anoki.jaxb.Alarm;
 import com.anoki.jaxb.Friend;
 import com.anoki.jaxb.Media;
 import com.anoki.jaxb.Prayer;
@@ -93,6 +94,11 @@ public class PrayerResource {
 					if(id == null){
 						id = (Integer) Ibatis.insert("insertTempUser",phone);
 						Common.sendInvite(user.name, phone);
+					}else{
+						User contact = (User)Ibatis.object("getUser",id);
+						if(contact.name == null){
+							Common.sendInvite(user.name, phone);							
+						}						
 					}
 					
 					
@@ -113,6 +119,8 @@ public class PrayerResource {
 
 			if(prayer.friends != null && prayer.friends.size()>0){
 				Ibatis.insert("insertRequest", prayer);
+				
+				
 				
 				Ibatis.insert("insertRequestAlarm", prayer);
 				
@@ -289,6 +297,13 @@ public class PrayerResource {
 		saveFile(fileInputStream, filePath);
 
 		
+		try {
+			Ibatis.update("updateMediaType",id);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return id;
 
 	}
@@ -359,9 +374,11 @@ public class PrayerResource {
 		
 		try {
 			r = (Prayer) Ibatis.object("getPrayer", search);
-			r.media = (List<Media>) Ibatis.list("mediaList",r);
-			r.reply = (List<Reply>) Ibatis.list("replyList",search);
-			r.friends = (List<Friend>) Ibatis.list("requestFriends",r);
+			if(r != null){
+				r.media = (List<Media>) Ibatis.list("mediaList",r);
+				r.reply = (List<Reply>) Ibatis.list("replyList",search);
+				r.friends = (List<Friend>) Ibatis.list("requestFriends",r);
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -38,7 +38,8 @@
 			TEAM.LEAVE_AUTH AS LEAVEAUTH,
 			DATEDIFF(TEAM.UNTIL,NOW())  AS REMAIN,
 			IFNULL(MEMBER.ROLE,'0') AS ROLE,
-			TEAM.DALANT
+			TEAM.DALANT,
+			TEAM.INIT
 		FROM TEAM
 		LEFT OUTER JOIN MEMBER ON TEAM.ID = MEMBER.TEAM AND MEMBER.USER = #id#  
 		WHERE TEAM.ID = #searchId#
@@ -236,6 +237,10 @@
 		<isNotEmpty property="dalant">				
 		, DALANT = #dalant#
 		</isNotEmpty>
+		<isNotEmpty property="init">				
+		, INIT = #init#
+		</isNotEmpty>
+		
 		WHERE ID = #id#
 	</update>
 	

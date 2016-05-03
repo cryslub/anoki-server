@@ -7,5 +7,5 @@ public class Alarm {
 	public int picture;
 	public String time;
 	public int user;
-	public int gid;
+	public int gId;
 }

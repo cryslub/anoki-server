@@ -29,6 +29,12 @@
 		UPDATE USER SET DEVICE = #device#
 		WHERE ID = #id#
 	</update>
+	
+	<update id="updateUserPass" parameterClass="com.anoki.jaxb.User">
+		UPDATE USER SET PASS = #pass#
+		WHERE ACCOUNT = #account#
+	</update>
+	
 
 	<update id="updateUser" parameterClass="com.anoki.jaxb.User">
 		UPDATE USER 
@@ -72,6 +78,47 @@
 		</dynamic>
 	</update>
 
+	<update id="joinAnoki" parameterClass="com.anoki.jaxb.User">
+		UPDATE USER 
+		<dynamic prepend=" SET ">
+			<isNotEmpty property="name" prepend=",">		
+			NAME = #name#
+			</isNotEmpty>	
+			<isNotEmpty property="text" prepend=",">		
+			TEXT = #text#
+			</isNotEmpty>					
+			<isNotEmpty property="account" prepend=",">		
+			ACCOUNT = #account#
+			</isNotEmpty>		
+			<isNotEmpty property="picture" prepend=",">		
+			PICTURE = #picture#
+			</isNotEmpty>
+			<isNotEmpty property="showPhone" prepend=",">
+			SHOW_PHONE = #showPhone#
+			</isNotEmpty>
+			<isNotEmpty property="pass" prepend=",">		
+			PASS = #pass#
+			</isNotEmpty>
+			<isNotEmpty property="phone" prepend=",">		
+			PHONE = #phone#
+			</isNotEmpty>
+			<isNotEmpty property="country" prepend=",">		
+			COUNTRY = #country#
+			</isNotEmpty>
+			<isNotEmpty property="regid" prepend=",">		
+			REGID = #regid#
+			</isNotEmpty>
+		</dynamic>
+	
+		<dynamic prepend="where">		
+			<isNotEmpty property="id" prepend="and">		
+				ID = #id#
+			</isNotEmpty>
+
+		</dynamic>
+	</update>
+
+
 	<delete id="deleteUser" parameterClass="com.anoki.jaxb.User">		
 		DELETE USER WHERE ID = #id#
 	</delete>
@@ -90,7 +137,7 @@
 	
 	
 	<select id="getIdWithPhone" parameterClass="string" resultClass="int">
-		SELECT ID FROM USER WHERE PHONE=#number#
+		SELECT MAX(ID) FROM USER WHERE PHONE=#number#
 	</select>
 
 	<select id="getTempUserIdWithPhone" parameterClass="string" resultClass="int">
@@ -116,7 +163,7 @@
 		SELECT ID FROM USER WHERE ID=#id# AND PASS=#searchKey#
 	</select>
 	
-	<select id="getUser" parameterClass="com.anoki.jaxb.User"
+	<select id="getUser"
 		resultClass="com.anoki.jaxb.User">
 		SELECT 
 			ID,

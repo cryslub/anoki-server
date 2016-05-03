@@ -24,7 +24,29 @@ public class Scheduler  implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		// TODO Auto-generated method stub
-	     
+		 t =  new Thread(){
+	            //task
+	            public void run(){                
+	                try {
+	                    while(true){
+	                        try {
+		                        
+
+	                        	Ibatis.object("heartbeat",null);
+	                        
+		                        
+	                        	Thread.sleep(1000*60*60);
+								
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+	                    	
+	                    }
+	                } catch (InterruptedException e) {}
+	            }            
+	        };
+	        t.start();
 //	      
 //	      t =  new Thread(){
 //	            //task

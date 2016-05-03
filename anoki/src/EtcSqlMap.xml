@@ -12,8 +12,8 @@
 			NAME1,
 			NAME2,			
 			TIME,
-			IFNULL(PICTURE,-1),
-			GID
+			IFNULL(PICTURE,-1) AS PICTURE,
+			IFNULL(GID,-1) AS GID
 		FROM ALARM 
 		WHERE USER = #id#
 	</select>
@@ -64,13 +64,15 @@
 			USER,
 			TYPE,
 			NAME1,
-			PICTURE
+			PICTURE,
+			GID
 		) 
 		SELECT 
 			ID , 
 			'Q', 
 			(SELECT NAME FROM USER WHERE ID = #userId#), 
-			(SELECT PICTURE FROM USER WHERE ID = #userId#)
+			(SELECT PICTURE FROM USER WHERE ID = #userId#),
+			#id#
 		FROM USER
 		WHERE ID IN(
 		<iterate  conjunction=", " property="friends">
@@ -94,8 +96,10 @@
 			USER.NAME,
 			USER.PICTURE,
 			USER.ID
-		FROM FRIEND LEFT OUTER JOIN USER ON FRIEND.FRIEND = USER.ID
+		FROM FRIEND 
+		JOIN USER ON FRIEND.FRIEND = USER.ID
 		AND FRIEND.FRIEND = #friend#
+		AND USER.NAME IS NOT NULL
 	</insert>
 	
 	<insert id="insertResponseAlarm" parameterClass="com.anoki.jaxb.Reply">
@@ -264,5 +268,9 @@
 		INSERT INTO INFORM(USER,TEXT,INFORMER)
 		VALUES(#searchId#,#searchKey#,#id#)
 	</insert>
+	
+	<select id="heartbeat" resultClass="int">
+		SELECT 1
+	</select>
 	
 </sqlMap>

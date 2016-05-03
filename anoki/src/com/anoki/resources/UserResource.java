@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.anoki.jaxb.Alarm;
 import com.anoki.jaxb.Dalant;
 import com.anoki.jaxb.Prayer;
 import com.anoki.jaxb.Response;
@@ -45,9 +46,9 @@ public class UserResource {
 					r.id = Ibatis.insert("insertUser",user);
 				}else{
 					user.id = r.id;
-					Ibatis.update("updateUser",user);					
-					
-					Ibatis.insert("insertFriendAlarm",r.id);
+					Ibatis.update("joinAnoki",user);					
+							
+					Ibatis.insert("insertFriendAlarm",user);
 					
 //					List<User> list = (List<User>) Ibatis.list("getFriendRegIds", r.id);
 //					for(User u:list){

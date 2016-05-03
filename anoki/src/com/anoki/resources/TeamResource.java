@@ -273,8 +273,8 @@ public class TeamResource {
 	}
 	
 	
-	@DELETE
-	@Path("member")
+	@POST
+	@Path("leave")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response leave(Member member) {
